@@ -1,0 +1,115 @@
+/*убираем отступы всех элементов*/
+* {
+	margin: 0; 
+	padding: 0; 
+}
+
+/*разметка всего тела*/
+body{
+	background-color: #1F2D45;;
+	font-size: 16px; /* Задаём размер шрифта для всей страницы */
+	font-family: 'Roboto', sans-serif; /* Задаём шрифт для всей страницы */
+	color: #fff;
+}
+/*центрированный заголовок таблицы*/
+h1{
+	text-align: center;
+}
+
+/*поле ввода*/
+input{
+	width: 100%;
+	height: 20px;
+	margin-top: 5px;
+	background-color: white;
+	border-radius: 5px;
+	border: none;
+}
+
+/*картинка с выравниванием по центру*/
+img{ 
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 200px;
+  height: 200px;
+}
+
+/*подсказка для пароля*/
+span.hint{
+	margin-top: 0;
+	font-size: 10px;
+	color: lightgray;
+}
+
+label{
+	margin-top: 5px;
+}
+textarea{
+	margin-top: 10px;
+}
+
+
+/*разметка элементов табилцы*/
+table {
+   border: 1px solid grey;
+   color: black;
+   background-color: #FDA378;
+   border-collapse:collapse;
+   border-radius: 5px;
+ }
+
+th{
+	text-align: left;
+	background-color: #FE7D39;
+	border-bottom:2px solid black;
+	border-left: none;
+}
+
+/*кнопки на форме*/
+.submit_button{
+	background-color: #F98F31;
+	border-radius: 5px;
+	width: 200px;
+	border: none;
+	margin-top: 5px;
+	padding: 5px; 
+
+}
+
+/*кнопки в таблице*/
+.table_button{
+	background-color: #F98F31;
+	border-radius: 5px;
+	width: 100%;
+	border: none;
+	margin-top: 5px;
+	padding: 5px; 
+}
+
+/*контейнер для элементов*/
+.block{
+	border-radius: 15px;
+	margin: auto;
+  width: 80%;
+ 	padding: 10px;
+	margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: flex; 
+	flex-direction: column; 
+	justify-content: flex-start; 
+
+}
+
+/*окно ошибки*/
+.error{
+	width: 100%;
+	margin: auto;
+	border: 1px solid red;
+	background-color: #F7CCD1;
+	color: #8A323C;
+	border-radius: 10px;
+	padding: 10px;
+}
