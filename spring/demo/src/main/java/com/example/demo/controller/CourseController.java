@@ -35,8 +35,11 @@ public class CourseController {
     @GetMapping("/{id}")
     public String courseForm (Model model, @PathVariable ("id") Long id){
         statisticsCounter.countHandlerCall("/course/{id}");
-        model.addAttribute("course", courseLister.courseById(id).get());
-        return "course_form";
+        if (courseLister.courseById(id).isPresent()){
+            model.addAttribute("course", courseLister.courseById(id).get());
+            return "course_form";
+        }
+        return "course_not_found";
     }
 
     @GetMapping("/new")

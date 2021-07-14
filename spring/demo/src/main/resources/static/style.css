@@ -123,11 +123,11 @@ a{
 }
 /*окно ошибки*/
 .error{
+	padding-top: 20px;
 	width: 100%;
 	margin: auto;
 	border: 1px solid red;
 	background-color: #F7CCD1;
 	color: #8A323C;
 	border-radius: 10px;
-	padding: 10px;
 }
