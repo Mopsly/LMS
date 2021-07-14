@@ -2,13 +2,14 @@ package com.example.demo.controller;
 
 import com.example.demo.domain.Course;
 import com.example.demo.service.CourseLister;
-import exceptions.CourseNotFoundException;
 import com.example.demo.service.StatisticsCounter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 
@@ -34,16 +35,18 @@ public class CourseController {
     }
 
     @GetMapping("/{id}")
-    public String courseForm (Model model, @PathVariable ("id") Long id) throws CourseNotFoundException {
+    public String courseForm (Model model, @PathVariable ("id") Long id) throws NotFoundException {
         statisticsCounter.countHandlerCall("/course/{id}");
         model.addAttribute("course", courseLister.courseById(id));
         return "course_form";
     }
 
-    @ExceptionHandler(CourseNotFoundException.class)
-    public String courseNotFound(){
+    @ExceptionHandler(NotFoundException.class)
+    public ModelAndView notFoundExceptionHandler(){
         statisticsCounter.countHandlerCall("/course_not_found");
-        return "course_not_found";
+        ModelAndView modelAndView = new ModelAndView("not_found");
+        modelAndView.setStatus(HttpStatus.NOT_FOUND);
+        return modelAndView;
     }
 
     @GetMapping("/new")
