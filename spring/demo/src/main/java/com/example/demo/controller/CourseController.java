@@ -4,24 +4,61 @@ import com.example.demo.domain.Course;
 import com.example.demo.service.CourseLister;
 import com.example.demo.service.StatisticsCounter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.validation.Valid;
 
-@RestController
+@Controller
 @RequestMapping ("/course")
 public class CourseController {
-    @Autowired
-    private CourseLister courseLister;
-    @Autowired
-    private StatisticsCounter statisticsCounter;
 
-    @GetMapping("/interesting")
-    public List<Course> getInterestingCourses(){
-        statisticsCounter.countHandlerCall();
-        // у нас есть бизнес инсайт, что все интересные курсы написал Ваня
-        return courseLister.coursesByAuthor("Вася");
+    private final CourseLister courseLister;
+    private final StatisticsCounter statisticsCounter;
+
+    @Autowired
+    public CourseController(CourseLister courseLister, StatisticsCounter statisticsCounter){
+                this.courseLister = courseLister;
+                this.statisticsCounter = statisticsCounter;
+    }
+
+    @GetMapping
+    public String courseTable(Model model, @RequestParam(name = "titlePrefix",required = false) String titlePrefix){
+        statisticsCounter.countHandlerCall("/course");
+        model.addAttribute("courses",courseLister.
+                courseByTitlePrefix(titlePrefix == null ? "" : titlePrefix));
+        return "course_table";
+    }
+
+    @GetMapping("/{id}")
+    public String courseForm (Model model, @PathVariable ("id") Long id){
+        statisticsCounter.countHandlerCall("/course/{id}");
+        model.addAttribute("course", courseLister.courseById(id).get());
+        return "course_form";
+    }
+
+    @GetMapping("/new")
+    public String courseForm(Model model){
+        statisticsCounter.countHandlerCall("/course/new");
+        model.addAttribute("course", new Course());
+        return "course_form";
+    }
+    @DeleteMapping("/{id}")
+    public String deleteCourse(@PathVariable("id") Long id){
+        statisticsCounter.countHandlerCall("/course/{id} - delete");
+        courseLister.deleteCourse(id);
+        return "redirect:/course";
+    }
+
+    @PostMapping(params = {"submit"})
+    public String submitCourseForm(@Valid Course course, BindingResult bindingResult){
+        statisticsCounter.countHandlerCall("/course/submit");
+        if (bindingResult.hasErrors()){
+            return "course_form";
+        }
+        courseLister.saveCourse(course);
+        return "redirect:/course";
     }
 }

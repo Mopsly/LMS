@@ -1,8 +1,13 @@
 package com.example.demo.domain;
 
+import javax.validation.constraints.NotBlank;
+
 public class Course {
     private Long id;
+
+    @NotBlank(message = "Автор курса должен быть заполнен")
     private String author;
+    @NotBlank(message = "Название курса должен быть заполнен")
     private String title;
 
     public Course() {
