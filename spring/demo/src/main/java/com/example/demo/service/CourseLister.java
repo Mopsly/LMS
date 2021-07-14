@@ -2,11 +2,11 @@ package com.example.demo.service;
 
 import com.example.demo.dao.CourseRepository;
 import com.example.demo.domain.Course;
+import exceptions.CourseNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -18,8 +18,10 @@ public class CourseLister {
         this.repository = repository;
     }
 
-    public Optional<Course> courseById(Long id){
-        return repository.findById(id);
+    public Course courseById(Long id) throws CourseNotFoundException {
+        if(repository.findById(id).isPresent())
+            return repository.findById(id).get();
+        throw new CourseNotFoundException();
     }
 
     public List<Course> courseByTitlePrefix(String prefix){

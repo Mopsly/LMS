@@ -123,9 +123,11 @@ a{
 }
 /*окно ошибки*/
 .error{
-	padding-top: 20px;
+	margin-top: 20px;
 	width: 100%;
-	margin: auto;
+	line-height: 50px;
+	height: 50px;
+	margin-left: auto;
 	border: 1px solid red;
 	background-color: #F7CCD1;
 	color: #8A323C;

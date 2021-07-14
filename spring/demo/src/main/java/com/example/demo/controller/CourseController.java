@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.domain.Course;
 import com.example.demo.service.CourseLister;
+import exceptions.CourseNotFoundException;
 import com.example.demo.service.StatisticsCounter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,12 +34,15 @@ public class CourseController {
     }
 
     @GetMapping("/{id}")
-    public String courseForm (Model model, @PathVariable ("id") Long id){
+    public String courseForm (Model model, @PathVariable ("id") Long id) throws CourseNotFoundException {
         statisticsCounter.countHandlerCall("/course/{id}");
-        if (courseLister.courseById(id).isPresent()){
-            model.addAttribute("course", courseLister.courseById(id).get());
-            return "course_form";
-        }
+        model.addAttribute("course", courseLister.courseById(id));
+        return "course_form";
+    }
+
+    @ExceptionHandler(CourseNotFoundException.class)
+    public String courseNotFound(){
+        statisticsCounter.countHandlerCall("/course_not_found");
         return "course_not_found";
     }
 
