@@ -1,0 +1,138 @@
+/*убираем отступы всех элементов*/
+* {
+	margin: 0; 
+	padding: 0; 
+}
+
+/*разметка всего тела*/
+body{
+	background-color: #1F2D45;
+	font-size: 16px; /* Задаём размер шрифта для всей страницы */
+	font-family: 'Roboto', sans-serif; /* Задаём шрифт для всей страницы */
+	color: #fff;
+}
+
+header{
+	margin-top: 15px;
+	background-color: #F98F31;
+	width: 100%;
+	height: 50px;
+	display: table;
+}
+.header-item{
+	padding-left: 25px;
+	padding-right: 25px;
+	height: 50px;
+	line-height: 50px;
+	display: inline-block;
+	border-right: 1px solid black;
+}
+.header-item:hover{
+	background-color: #DE6E23;
+}
+/*центрированный заголовок таблицы*/
+h1{
+	text-align: center;
+}
+
+/*поле ввода*/
+input{
+	width: 100%;
+	height: 20px;
+	margin-top: 5px;
+	background-color: white;
+	border-radius: 5px;
+	border: none;
+	font-size: 16px;
+}
+
+/*картинка с выравниванием по центру*/
+img{ 
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 200px;
+  height: 200px;
+}
+
+/*подсказка для пароля*/
+small.hint{
+	margin-top: 0;
+	font-size: 10px;
+	color: red;
+}
+
+label{
+	margin-top: 5px;
+}
+textarea{
+	margin-top: 10px;
+}
+
+
+/*разметка элементов табилцы*/
+table {
+   border: 1px solid grey;
+   color: black;
+   background-color: #FDA378;
+   border-collapse:collapse;
+   border-radius: 5px;
+ }
+
+th{
+	text-align: left;
+	background-color: #F98F31;
+	border-bottom:2px solid black;
+	border-left: none;
+}
+tr:hover{
+	background-color: #DE6E23;
+}
+
+/*кнопки на форме*/
+.submit-button{
+	background-color: #F98F31;
+	border-radius: 5px;
+	width: 200px;
+	border: none;
+	margin-top: 5px;
+	padding: 5px;
+}
+
+/*кнопки в таблице*/
+.table-button{
+	background-color: #F98F31;
+	border-radius: 5px;
+	width: 100%;
+	border: none;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	padding: 5px; 
+}
+
+/*контейнер для элементов*/
+.block{
+	border-radius: 15px;
+	width: 80%;
+ 	padding: 10px;
+	margin: 10px auto;
+	display: flex;
+	flex-direction: column; 
+	justify-content: flex-start;
+}
+a{
+	text-decoration: none;
+	color: white;
+}
+/*окно ошибки*/
+.error{
+	margin-top: 20px;
+	width: 100%;
+	line-height: 50px;
+	height: 50px;
+	margin-left: auto;
+	border: 1px solid red;
+	background-color: #F7CCD1;
+	color: #8A323C;
+	border-radius: 10px;
+}

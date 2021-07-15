@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.dao.CourseRepository;
 import com.example.demo.domain.Course;
+import com.example.demo.controller.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,8 +18,23 @@ public class CourseLister {
         this.repository = repository;
     }
 
+    public Course courseById(Long id){
+            return repository.findById(id).orElseThrow(NotFoundException::new);
+    }
+
+    public List<Course> courseByTitlePrefix(String prefix){
+        return repository.findByTitleWithPrefix(prefix);
+    }
+    public void saveCourse(Course course){
+        repository.save(course);
+    }
+
     public List<Course> coursesByAuthor(String name){
         List <Course> allCourses= repository.findAll();
         return allCourses.stream().filter(course -> course.getAuthor().equals(name)).collect(Collectors.toList());
+    }
+
+    public void deleteCourse(Long id) {
+        repository.delete(id);
     }
 }

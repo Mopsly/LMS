@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th ="http://thymeleaf.org">
+<link rel="stylesheet" th:href="@{../style.css}">
+
+
+  <header>
+	<span class="header-item" th:classappend="${activePage =='courses'} ? active">
+		<a th:href="@{/course}">Курсы</a>
+	</span>
+	  <span class="header-item" th:classappend="${activePage =='users'} ? active">
+		<a th:href="@{/user}">Пользователи</a>
+	</span>
+  </header>
+
+</html>
