@@ -16,7 +16,7 @@
 		<form>
 			<label for="titlePrefix">Поиск по названию:</label>
 			<input type="text" id="titlePrefix" name="titlePrefix" th:value="${param.titlePrefix}">
-			<button class="submit_button">Найти</button>
+			<button class="submit-button">Найти</button>
 		</form>
 	</div>
 
@@ -40,9 +40,9 @@
 					</td>
 					<td th:text="${course.author}">Course Author</td>
 					<td>
-<!--						<button class="table_button">Добавить</button><br> временно убрал до того как потребуется-->
+<!--						<button class="table-button">Добавить</button><br> временно убрал до того как потребуется-->
 						<form th:method="delete" th:action="@{/course/{id}(id = ${course.id})}">
-							<button class="table_button" type="submit">Удалить</button>
+							<button class="table-button" type="submit">Удалить</button>
 						</form>
 					</td>
 				</tr>

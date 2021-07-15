@@ -19,14 +19,16 @@ header{
 	height: 50px;
 	display: table;
 }
-.header_item{
+.header-item{
 	padding-left: 25px;
 	padding-right: 25px;
 	height: 50px;
 	line-height: 50px;
 	display: inline-block;
 	border-right: 1px solid black;
-
+}
+.header-item:hover{
+	background-color: #DE6E23;
 }
 /*центрированный заголовок таблицы*/
 h1{
@@ -83,37 +85,38 @@ th{
 	border-bottom:2px solid black;
 	border-left: none;
 }
+tr:hover{
+	background-color: #DE6E23;
+}
 
 /*кнопки на форме*/
-.submit_button{
+.submit-button{
 	background-color: #F98F31;
 	border-radius: 5px;
 	width: 200px;
 	border: none;
 	margin-top: 5px;
-	padding: 5px; 
-
+	padding: 5px;
 }
 
 /*кнопки в таблице*/
-.table_button{
+.table-button{
 	background-color: #F98F31;
 	border-radius: 5px;
 	width: 100%;
 	border: none;
 	margin-top: 5px;
+	margin-bottom: 5px;
 	padding: 5px; 
 }
 
 /*контейнер для элементов*/
 .block{
 	border-radius: 15px;
-	margin: auto;
-  	width: 80%;
+	width: 80%;
  	padding: 10px;
- 	margin-top: 10px;
- 	margin-bottom: 10px;
-  	display: flex;
+	margin: 10px auto;
+	display: flex;
 	flex-direction: column; 
 	justify-content: flex-start;
 }

@@ -18,7 +18,7 @@ public class CourseLister {
         this.repository = repository;
     }
 
-    public Course courseById(Long id) throws NotFoundException {
+    public Course courseById(Long id){
             return repository.findById(id).orElseThrow(NotFoundException::new);
     }
 

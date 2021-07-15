@@ -19,7 +19,7 @@
 				<input type="hidden" th:field="*{id}">
 				<label for="pic">Выберите обложку курса</label>
 				<input type="file" name="pic">
-				<button class="submit_button">Обновить</button>
+				<button class="submit-button">Обновить</button>
 				<label for="course-name">Название:</label>
 				<input type="text" name="course-name" th:field="*{title}">
 				<small  class="hint" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">
@@ -30,7 +30,7 @@
 				<small  class="hint" th:if="${#fields.hasErrors('author')}" th:errors="*{author}">
 					Автор курса должен быть заполнен
 				</small>
-				<button class="submit_button" name="submit" value="submit">Сохранить</button>
+				<button class="submit-button" name="submit" value="submit">Сохранить</button>
 		</div>
 	</form>
 	<div class="block">
@@ -43,7 +43,7 @@
 					<td>1</td>
 					<td>Course name</td>
 					<td>
-						<button class="table_button">Удалить</button><br>
+						<button class="table-button">Удалить</button><br>
 					</td>	
 
 				</tr>
@@ -60,7 +60,7 @@
 					<td>1</td>
 					<td>User name</td>
 					<td>
-						<button class="table_button">Снять с курса</button><br>
+						<button class="table-button">Снять с курса</button><br>
 					</td>	
 
 				</tr>

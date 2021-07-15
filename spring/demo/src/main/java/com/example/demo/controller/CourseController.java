@@ -35,7 +35,7 @@ public class CourseController {
     }
 
     @GetMapping("/{id}")
-    public String courseForm (Model model, @PathVariable ("id") Long id) throws NotFoundException {
+    public String courseForm (Model model, @PathVariable ("id") Long id){
         statisticsCounter.countHandlerCall("/course/{id}");
         model.addAttribute("course", courseLister.courseById(id));
         return "course_form";
