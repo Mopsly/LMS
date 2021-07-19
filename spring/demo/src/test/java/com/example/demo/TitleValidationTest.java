@@ -74,4 +74,16 @@ private ConstraintValidatorContext constraintValidatorContext;
         boolean result = validator.isValid("Course имя",constraintValidatorContext);
         assertEquals (result,false);
     }
+    @Test
+    public void testNull(){
+        TitleCaseValidator validator= new TitleCaseValidator();
+        validator.setLang(Lang.ANY);
+        RuntimeException generatedException = null;
+        try {
+            boolean result = validator.isValid(null, constraintValidatorContext);
+        }catch (RuntimeException e){
+            generatedException = e;
+        }
+        assertEquals (generatedException.getMessage(),"Validated value is null");
+    }
 }

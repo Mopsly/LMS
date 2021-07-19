@@ -12,12 +12,12 @@ public class TitleCaseValidator implements ConstraintValidator<TitleCase, String
 
     private Lang lang;
 
-    private boolean eng = false;
     private boolean ru = false;
+    private boolean eng = false;
 
-    private final String[] enLowerCaseWords = {"a", "but", "or", "not", "the", "an", "for","of","at"};
-    private final String[] forbiddenSymbols = {"\r", "\t", "\n"};
-    private final char[] allowedSymbols = {'"', '\'', ',', ':', ' '};
+    private static final String[] enLowerCaseWords = {"a", "but", "or", "not", "the", "an", "for", "of", "at"};
+    private static final String[] forbiddenSymbols = {"\r", "\t", "\n"};
+    private static final String allowedSymbols = "\" ',:";
 
     @Override
     public void initialize(TitleCase constraintAnnotation) {
@@ -27,13 +27,18 @@ public class TitleCaseValidator implements ConstraintValidator<TitleCase, String
     @Override
     public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {
 
+        if (value == null) {
+            throw new RuntimeException("Validated value is null");
+        }
+
+        int a = 0;
         switch (lang) {
             case RU:
                 return isGeneralValid(value) && isRuValid(value);
             case EN:
                 return isGeneralValid(value) && isEnValid(value);
             default:
-                return isGeneralValid(value);
+                return isGeneralValid(value) && (isRuValid(value) || isEnValid(value));
         }
     }
 
@@ -63,18 +68,15 @@ public class TitleCaseValidator implements ConstraintValidator<TitleCase, String
                     ru = true;
                 } else if (Character.UnicodeBlock.BASIC_LATIN.equals(block)) {
                     eng = true;
-                }
-                //если какая-то другая буква - невалидно
-                else{
+                } else {           //если какая-то другая буква - невалидно
                     return false;
                 }
-            }
-                // если не буква, то проверка на доп символы
-            else
-            if (new String(allowedSymbols).indexOf(symbol) < 0)
-                return false;
+            } else  // если не буква, то проверка на доп символы
+                if (allowedSymbols.indexOf(symbol) < 0){
+                    return false;
+                }
         }
-        return eng!=ru;
+        return eng != ru;
     }
 
 
@@ -114,6 +116,7 @@ public class TitleCaseValidator implements ConstraintValidator<TitleCase, String
         }
         return true;
     }
+
     public void setLang(Lang lang) {
         this.lang = lang;
     }
