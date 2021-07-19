@@ -12,8 +12,8 @@ public class TitleCaseValidator implements ConstraintValidator<TitleCase, String
 
     private Lang lang;
 
-    private boolean ru = false;
-    private boolean eng = false;
+    private boolean ru;
+    private boolean eng;
 
     private static final String[] enLowerCaseWords = {"a", "but", "or", "not", "the", "an", "for", "of", "at"};
     private static final String[] forbiddenSymbols = {"\r", "\t", "\n"};
@@ -30,8 +30,9 @@ public class TitleCaseValidator implements ConstraintValidator<TitleCase, String
         if (value == null) {
             throw new RuntimeException("Validated value is null");
         }
+        ru = false;
+        eng = false;
 
-        int a = 0;
         switch (lang) {
             case RU:
                 return isGeneralValid(value) && isRuValid(value);
