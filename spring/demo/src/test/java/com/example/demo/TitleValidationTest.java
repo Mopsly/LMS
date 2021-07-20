@@ -78,12 +78,7 @@ private ConstraintValidatorContext constraintValidatorContext;
     public void testNull(){
         TitleCaseValidator validator= new TitleCaseValidator();
         validator.setLang(Lang.ANY);
-        RuntimeException generatedException = null;
-        try {
-            boolean result = validator.isValid(null, constraintValidatorContext);
-        }catch (RuntimeException e){
-            generatedException = e;
-        }
-        assertEquals (generatedException.getMessage(),"Validated value is null");
+        boolean result = validator.isValid(null,constraintValidatorContext);
+        assertEquals (result,false);
     }
 }

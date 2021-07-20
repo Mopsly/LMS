@@ -12,9 +12,6 @@ public class TitleCaseValidator implements ConstraintValidator<TitleCase, String
 
     private Lang lang;
 
-    private boolean ru;
-    private boolean eng;
-
     private static final String[] enLowerCaseWords = {"a", "but", "or", "not", "the", "an", "for", "of", "at"};
     private static final String[] forbiddenSymbols = {"\r", "\t", "\n"};
     private static final String allowedSymbols = "\" ',:";
@@ -28,35 +25,40 @@ public class TitleCaseValidator implements ConstraintValidator<TitleCase, String
     public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {
 
         if (value == null) {
-            throw new RuntimeException("Validated value is null");
+            return false;
         }
-        ru = false;
-        eng = false;
 
         switch (lang) {
             case RU:
-                return isGeneralValid(value) && isRuValid(value);
+                return isRuValid(isGeneralValid(value), value);
             case EN:
-                return isGeneralValid(value) && isEnValid(value);
+                return isEnValid(isGeneralValid(value), value);
             default:
-                return isGeneralValid(value) && (isRuValid(value) || isEnValid(value));
+                TitleCaseValidatorDto generalValidDto = isGeneralValid(value);
+                return isEnValid(generalValidDto, value) || isRuValid(generalValidDto, value);
+
         }
     }
 
-    public boolean isGeneralValid(String value) {
+    public TitleCaseValidatorDto isGeneralValid(String value) {
+        TitleCaseValidatorDto validatorDto = new TitleCaseValidatorDto();
         // проверка запрещенных символов
         for (String symbol : forbiddenSymbols) {
             if (value.contains(symbol)) {
-                return false;
+                validatorDto.setGeneralValid(false);
+                return validatorDto;
             }
         }
         // проверка первого и последнего символа на пробел
         if (value.charAt(0) == ' ' || value.charAt(value.length() - 1) == ' ') {
-            return false;
+            validatorDto.setGeneralValid(false);
+            return validatorDto;
         }
         //проверка на несколько пробелов подряд
-        if (value.contains("  "))
-            return false;
+        if (value.contains("  ")) {
+            validatorDto.setGeneralValid(false);
+            return validatorDto;
+        }
 
         //проверка на сочетание русских и английских символов
         //плюс проверка на допустимость символов
@@ -66,24 +68,27 @@ public class TitleCaseValidator implements ConstraintValidator<TitleCase, String
                 Character.UnicodeBlock block = Character.UnicodeBlock.of(symbol);
                 //проверка на англ. или рус. букву
                 if (Character.UnicodeBlock.CYRILLIC.equals(block)) {
-                    ru = true;
+                    validatorDto.setRuLang(true);
                 } else if (Character.UnicodeBlock.BASIC_LATIN.equals(block)) {
-                    eng = true;
+                    validatorDto.setEnLang(true);
                 } else {           //если какая-то другая буква - невалидно
-                    return false;
+                    validatorDto.setGeneralValid(false);
+                    return validatorDto;
                 }
             } else  // если не буква, то проверка на доп символы
-                if (allowedSymbols.indexOf(symbol) < 0){
-                    return false;
+                if (allowedSymbols.indexOf(symbol) < 0) {
+                    validatorDto.setGeneralValid(false);
+                    return validatorDto;
                 }
         }
-        return eng != ru;
+        validatorDto.setGeneralValid(validatorDto.isEnLang() != validatorDto.isRuLang());
+        return validatorDto;
     }
 
 
-    public boolean isRuValid(String value) {
+    public boolean isRuValid(TitleCaseValidatorDto validatorDto, String value) {
         //проверка что подан действительно русский
-        if (!ru) return false;
+        if (!validatorDto.isRuLang() || !validatorDto.isGeneralValid()) return false;
         List<String> wordList = Arrays.asList(value.split(" "));
         //  Если первое слово начинается с маленькой буквы - невалидно
         if (Character.isLowerCase(wordList.get(0).charAt(0))) {
@@ -98,9 +103,9 @@ public class TitleCaseValidator implements ConstraintValidator<TitleCase, String
         return true;
     }
 
-    public boolean isEnValid(String value) {
+    public boolean isEnValid(TitleCaseValidatorDto validatorDto, String value) {
         //проверка что подан действительно английский
-        if (!eng) return false;
+        if (!validatorDto.isEnLang() || !validatorDto.isGeneralValid()) return false;
         List<String> lowerCaseWordList = Arrays.asList(enLowerCaseWords);
         List<String> wordList = Arrays.asList(value.split(" "));
         //Если первое и последнее слово - не с большой буквы - невалидно
