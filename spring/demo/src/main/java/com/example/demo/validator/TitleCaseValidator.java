@@ -24,7 +24,7 @@ public class TitleCaseValidator implements ConstraintValidator<TitleCase, String
     @Override
     public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {
 
-        if (value == null) {
+        if ((value == null) || (value.isEmpty())) {
             return false;
         }
 
