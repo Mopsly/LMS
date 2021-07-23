@@ -33,14 +33,17 @@
 					</tr>
 				</thead>
 				<tbody>
-				<tr th:each ="course : ${courses}">
+				<tr th:unless="${courses.empty}" th:each ="course : ${courses}">
 					<td th:text="${course.id}">1</td>
 					<td>
 						<a th:text="${course.title}" th:href="@{/course/{id}(id = ${course.id})}">Course name</a>
 					</td>
 					<td th:text="${course.author}">Course Author</td>
 					<td>
-<!--						<button class="table-button">Добавить</button><br> временно убрал до того как потребуется-->
+						<form class="inline" th:method="get" th:action="@{/course/{id}/assign(id = ${course.id})}">
+							<button class="table-button" type="submit">Назначить</button>
+						</form>
+
 						<form th:method="delete" th:action="@{/course/{id}(id = ${course.id})}">
 							<button class="table-button" type="submit">Удалить</button>
 						</form>
@@ -48,7 +51,9 @@
 				</tr>
 				</tbody>
 
-				<tr><td colspan="4">Нет данных</td></tr>
+				<tr th:if="${courses.empty}">
+					<td colspan="4">Нет данных</td>
+				</tr>
 			</table>
 		</div>		
 </body>
