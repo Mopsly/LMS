@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.controller.NotFoundException;
+import com.example.demo.exception.NotFoundException;
 import com.example.demo.dao.LessonRepository;
 import com.example.demo.domain.Lesson;
 import com.example.demo.dto.LessonDto;

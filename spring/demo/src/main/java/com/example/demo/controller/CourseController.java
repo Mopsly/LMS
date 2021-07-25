@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.domain.Course;
 import com.example.demo.domain.User;
+import com.example.demo.exception.NotFoundException;
 import com.example.demo.service.CourseService;
 import com.example.demo.service.LessonService;
 import com.example.demo.service.StatisticsCounter;
@@ -50,14 +51,6 @@ public class CourseController {
         model.addAttribute("lessons",lessonService.lessonsWithoutText(id));
         model.addAttribute("users",course.getUsers());
         return "course_form";
-    }
-
-    @ExceptionHandler(NotFoundException.class)
-    public ModelAndView notFoundExceptionHandler() {
-        statisticsCounter.countHandlerCall("/course_not_found");
-        ModelAndView modelAndView = new ModelAndView("not_found");
-        modelAndView.setStatus(HttpStatus.NOT_FOUND);
-        return modelAndView;
     }
 
     @GetMapping("/new")
