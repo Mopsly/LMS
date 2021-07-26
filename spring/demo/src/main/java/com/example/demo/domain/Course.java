@@ -20,9 +20,14 @@ public class Course {
     @NotBlank(message = "Автор курса должен быть заполнен")
     private String author;
 
+<<<<<<< spring/demo/src/main/java/com/example/demo/domain/Course.java
     @Column
     @NotBlank(message = "Название курса должен быть заполнен")
     @TitleCase(lang = Lang.ANY)
+=======
+    @NotBlank(message = "Название курса должен быть заполнен")
+    @TitleCase(lang = Lang.EN)
+>>>>>>> spring/demo/src/main/java/com/example/demo/domain/Course.java
     private String title;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
