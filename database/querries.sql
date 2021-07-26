@@ -21,7 +21,7 @@ SELECT * FROM content
 WHERE lesson_id = 'x'
 
 //Добавление нового пользователя
-INSERT INTO users (id, nickname,fullname, email, admin)
+INSERT INTO user (id, nickname,fullname, email, admin)
 VALUES ('1', 'Alex', 'Alecandr Ivanov','alex@mail.ru', 'false')
 
 //Добавление нового урока
