@@ -30,6 +30,27 @@ header{
 .header-item:hover{
 	background-color: #DE6E23;
 }
+
+.float-right{
+	display:inline-block;
+	float:right;
+	height: 50px;
+	line-height: 50px;
+}
+
+.header-button{
+	background-color: #1F2D45;
+	color: white;
+	border-radius: 5px;
+	border: none;
+	margin: 5px;
+	padding: 5px;
+}
+.header-link{
+	margin: 5px;
+	padding: 5px;
+}
+
 /*центрированный заголовок таблицы*/
 h1{
 	text-align: center;

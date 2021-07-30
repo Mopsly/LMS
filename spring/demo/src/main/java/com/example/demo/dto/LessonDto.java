@@ -1,13 +1,9 @@
 package com.example.demo.dto;
 
 public class LessonDto {
-
     private Long id;
-
     private String title;
-
     private String text;
-
     private Long courseId;
 
     public LessonDto() {
@@ -17,7 +13,7 @@ public class LessonDto {
         this.courseId = courseId;
     }
 
-    public LessonDto(Long id,Long courseId, String title, String text) {
+    public LessonDto(Long id, Long courseId, String title, String text) {
         this.id = id;
         this.title = title;
         this.text = text;
@@ -31,7 +27,7 @@ public class LessonDto {
     }
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -39,7 +35,7 @@ public class LessonDto {
     }
 
     public String getTitle() {
-        return title;
+        return this.title;
     }
 
     public void setTitle(String title) {
@@ -47,7 +43,7 @@ public class LessonDto {
     }
 
     public String getText() {
-        return text;
+        return this.text;
     }
 
     public void setText(String text) {
@@ -55,7 +51,7 @@ public class LessonDto {
     }
 
     public Long getCourseId() {
-        return courseId;
+        return this.courseId;
     }
 
     public void setCourseId(Long courseId) {

@@ -2,11 +2,11 @@ package com.example.demo.dto;
 
 public class CourseDto {
     private Long id;
-
     private String title;
+    private String author;
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -14,7 +14,7 @@ public class CourseDto {
     }
 
     public String getTitle() {
-        return title;
+        return this.title;
     }
 
     public void setTitle(String title) {
@@ -22,7 +22,7 @@ public class CourseDto {
     }
 
     public String getAuthor() {
-        return author;
+        return this.author;
     }
 
     public void setAuthor(String author) {
@@ -34,6 +34,4 @@ public class CourseDto {
         this.title = title;
         this.author = author;
     }
-
-    private String author;
 }
