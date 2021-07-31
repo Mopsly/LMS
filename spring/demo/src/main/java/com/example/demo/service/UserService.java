@@ -3,13 +3,17 @@ package com.example.demo.service;
 import com.example.demo.dao.RoleRepository;
 import com.example.demo.dao.UserRepository;
 import com.example.demo.domain.Course;
+import com.example.demo.domain.Role;
 import com.example.demo.domain.User;
 import com.example.demo.dto.UserDto;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.utils.MapptingUtils.UserMapper;
+
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,13 +32,13 @@ public class UserService {
     }
 
     public List<UserDto> findAll() {
-        return (List)this.userRepository.findAll().stream().map((usr) -> {
+        return this.userRepository.findAll().stream().map((usr) -> {
             return new UserDto(usr.getId(), usr.getUsername(), "", usr.getCourses(), usr.getRoles());
         }).collect(Collectors.toList());
     }
 
     public UserDto findById(long id) {
-        return this.userMapper.mapUserToDto((User)this.userRepository.findById(id).orElseThrow(NotFoundException::new));
+        return this.userMapper.mapUserToDto((User) this.userRepository.findById(id).orElseThrow(NotFoundException::new));
     }
 
     public List<User> unassignedUsers(Long courseId) {
@@ -42,22 +46,27 @@ public class UserService {
     }
 
     public void deleteById(long id) {
-        User user = (User)this.userRepository.findById(id).orElseThrow(NotFoundException::new);
-        Iterator var4 = user.getCourses().iterator();
+        User user = userRepository.findById(id).orElseThrow(NotFoundException::new);
 
-        while(var4.hasNext()) {
-            Course course = (Course)var4.next();
-            this.courseService.removeUserFromCourse(user, course);
+        if (user.getCourses() != null) {
+            for (Course course : user.getCourses()){
+                this.courseService.removeUserFromCourse(user, course);
+            }
         }
-
         this.userRepository.deleteById(id);
     }
 
     public void save(UserDto userDto) {
+        // если приходит запрос на сохранение пользователя без списка ролей,
+        // то ищем его первоначальный список ролей и сохраняем его
+        if (userDto.getRoles()==null){
+            Set<Role> roles = findById(userDto.getId()).getRoles();
+            userDto.setRoles(roles);
+        }
         this.userRepository.save(new User(userDto.getId(), userDto.getUsername(), this.encoder.encode(userDto.getPassword()), userDto.getCourses(), userDto.getRoles()));
     }
 
     public UserDto findUserByUsername(String username) {
-        return this.userMapper.mapUserToDto((User)this.userRepository.findUserByUsername(username).orElseThrow(NotFoundException::new));
+        return this.userMapper.mapUserToDto((User) this.userRepository.findUserByUsername(username).orElseThrow(NotFoundException::new));
     }
 }

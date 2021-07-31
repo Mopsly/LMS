@@ -4,11 +4,17 @@ package com.example.demo.dto;
 
 import com.example.demo.domain.Course;
 import com.example.demo.domain.Role;
+
+import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 public class UserDto {
     private Long id;
+
+    @NotBlank(message = "Имя пользователя должно быть заполнено")
     private String username;
+
+    @NotBlank(message = "Пароль должен быть заполнен")
     private String password;
     private Set<Course> courses;
     private Set<Role> roles;

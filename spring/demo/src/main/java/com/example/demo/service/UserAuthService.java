@@ -22,13 +22,16 @@ public class UserAuthService implements UserDetailsService {
     }
 
     @Transactional
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return (UserDetails)this.userRepository.findUserByUsername(username).map((user) -> {
-            return new User(user.getUsername(), user.getPassword(), (Collection)user.getRoles().stream().map((role) -> {
-                return new SimpleGrantedAuthority(role.getName());
-            }).collect(Collectors.toList()));
-        }).orElseThrow(() -> {
-            return new UsernameNotFoundException("User not found");
-        });
+        return userRepository.findUserByUsername(username)
+                .map(user -> new User(
+                        user.getUsername(),
+                        user.getPassword(),
+                        user.getRoles().stream()
+                                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                                .collect(Collectors.toList())
+                ))
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 }

@@ -6,7 +6,7 @@
 	<span class="header-item" th:classappend="${activePage =='courses'} ? active">
 		<a th:href="@{/course}">Курсы</a>
 	</span>
-    <span class="header-item" th:classappend="${activePage =='user'} ? active">
+    <span class="header-item" th:classappend="${activePage =='user'} ? active" sec:authorize="isAuthenticated()">
 		<a th:href="@{/user}">Мой профиль</a>
 	</span>
 

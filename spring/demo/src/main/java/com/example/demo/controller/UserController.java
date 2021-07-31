@@ -8,6 +8,8 @@ import com.example.demo.service.RoleService;
 import com.example.demo.service.StatisticsCounter;
 import com.example.demo.service.UserService;
 import java.util.List;
+import java.util.Set;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -47,11 +49,25 @@ public class UserController {
         return "user_form";
     }
 
-    @GetMapping({"/new"})
+    @GetMapping("/new")
     public String regForm(Model model) {
         this.statisticsCounter.countHandlerCall("/user");
-        model.addAttribute("user", this.roleService.setDefaultRole(new UserDto()));
+        model.addAttribute("user", new UserDto());
         return "reg_form";
+    }
+    @PostMapping("/new")
+    public String submitRegForm(@Valid @ModelAttribute("user") UserDto user, BindingResult bindingResult, HttpServletRequest request) {
+        if (bindingResult.hasErrors()) {
+            return "reg_form";
+        } else {
+            userService.save(roleService.setDefaultRole(user));
+            try {
+                request.login(user.getUsername(),user.getPassword());
+            } catch (ServletException e) {
+                e.printStackTrace();
+            }
+            return "redirect:/course";
+        }
     }
 
     @PostMapping

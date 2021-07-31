@@ -24,9 +24,9 @@ public class RoleService {
             roles = new HashSet();
         }
 
-        Role role = (Role)this.roleRepository.getById(1L);
-        ((Set)roles).add(role);
-        user.setRoles((Set)roles);
+        Role role = roleRepository.getById(1L);
+        roles.add(role);
+        user.setRoles(roles);
         return user;
     }
 
