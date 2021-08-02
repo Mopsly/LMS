@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.Constants;
 import com.example.demo.dao.RoleRepository;
 import com.example.demo.domain.Course;
 import com.example.demo.dto.UserDto;
@@ -10,10 +11,12 @@ import com.example.demo.service.StatisticsCounter;
 import com.example.demo.service.UserService;
 import com.example.demo.utils.MapptingUtils.CourseMapper;
 import com.example.demo.utils.MapptingUtils.UserMapper;
+
 import java.security.Principal;
 import java.util.Collections;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +51,7 @@ public class CourseController {
     }
 
     @GetMapping
-    public String courseTable(Principal principal, Model model, @RequestParam(name = "titlePrefix",required = false) String titlePrefix) {
+    public String courseTable(Principal principal, Model model, @RequestParam(name = "titlePrefix", required = false) String titlePrefix) {
         this.statisticsCounter.countHandlerCall("/course");
         if (principal != null) {
             logger.info("Request from user '{}'", principal.getName());
@@ -69,56 +72,43 @@ public class CourseController {
     }
 
     @GetMapping({"/new"})
+    @PreAuthorize("@AccessSecurityBean.hasAdminRights(#request)")
     public String courseForm(Model model, HttpServletRequest request) {
-        if (!request.isUserInRole("ROLE_ADMIN")) {
-            throw new AccessDeniedException();
-        } else {
-            this.statisticsCounter.countHandlerCall("/course/new");
-            model.addAttribute("course", new Course());
-            return "course_form";
-        }
+        this.statisticsCounter.countHandlerCall("/course/new");
+        model.addAttribute("course", new Course());
+        return "course_form";
     }
 
     @DeleteMapping({"/{id}"})
-    @PreAuthorize("@AccessSecurityBean.hasAccessToDeleteCourse(#request)")
+    @PreAuthorize("@AccessSecurityBean.hasAdminRights(#request)")
     public String deleteCourse(HttpServletRequest request, @PathVariable("id") Long id) {
         this.statisticsCounter.countHandlerCall("/course/{id} - delete");
-        if (!request.isUserInRole("ROLE_ADMIN")) {
-            throw new AccessDeniedException();
+        this.courseService.deleteCourse(id);
+        return "redirect:/course";
+    }
+
+    @PostMapping(params = {"submit"})
+    @PreAuthorize("@AccessSecurityBean.hasAdminRights(#request)")
+    public String submitCourseForm(@Valid Course course, HttpServletRequest request, BindingResult bindingResult) {
+        statisticsCounter.countHandlerCall("/course/submit");
+        if (bindingResult.hasErrors()) {
+            return "course_form";
         } else {
-            this.courseService.deleteCourse(id);
+            this.courseService.saveCourse(course);
             return "redirect:/course";
         }
     }
 
-    @PostMapping(
-            params = {"submit"}
-    )
-    public String submitCourseForm(@Valid Course course, HttpServletRequest request, BindingResult bindingResult) {
-        if (!request.isUserInRole("ROLE_ADMIN")) {
-            throw new AccessDeniedException();
-        } else {
-            this.statisticsCounter.countHandlerCall("/course/submit");
-            if (bindingResult.hasErrors()) {
-                return "course_form";
-            } else {
-                this.courseService.saveCourse(course);
-                return "redirect:/course";
-            }
-        }
-    }
-
-    @PreAuthorize("isAuthenticated()")
     @GetMapping({"/{courseId}/assign"})
+    @PreAuthorize("isAuthenticated()")
     public String assignCourse(Model model, HttpServletRequest request, @PathVariable Long courseId) {
         model.addAttribute("courseId", courseId);
-        if (request.isUserInRole("ROLE_ADMIN")) {
+        if (request.isUserInRole(Constants.ADMIN)) {
             model.addAttribute("users", this.userService.unassignedUsers(courseId));
         } else {
             UserDto user = this.userService.findUserByUsername(request.getRemoteUser());
             model.addAttribute("users", Collections.singletonList(user));
         }
-
         return "assign_course";
     }
 
@@ -131,14 +121,12 @@ public class CourseController {
     }
 
     @PostMapping({"/{courseId}/remove/{userId}"})
+    @PreAuthorize("@AccessSecurityBean.hasAdminRights(#request)")
     public String removeUserForm(@PathVariable("courseId") Long courseId, @PathVariable("userId") Long id, HttpServletRequest request) {
-        if (!request.isUserInRole("ROLE_ADMIN")) {
-            throw new AccessDeniedException();
-        } else {
-            UserDto userDto = this.userService.findById(id);
-            Course course = this.courseService.courseById(courseId);
-            this.courseService.removeUserFromCourse(this.userMapper.mapDtoToUser(userDto), course);
-            return "redirect:/course/{courseId}";
-        }
+        UserDto userDto = this.userService.findById(id);
+        Course course = this.courseService.courseById(courseId);
+        this.courseService.removeUserFromCourse(this.userMapper.mapDtoToUser(userDto), course);
+        return "redirect:/course/{courseId}";
     }
 }
+

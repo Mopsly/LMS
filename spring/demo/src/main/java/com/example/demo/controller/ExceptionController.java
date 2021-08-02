@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.exception.AccessDeniedException;
+import com.example.demo.exception.LoginFailedException;
 import com.example.demo.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -22,6 +23,13 @@ public class ExceptionController {
 
     @ExceptionHandler({AccessDeniedException.class})
     public ModelAndView noPermissionExceptionHandler(AccessDeniedException e) {
+        ModelAndView modelAndView = new ModelAndView("access_denied");
+        modelAndView.setStatus(HttpStatus.FORBIDDEN);
+        return modelAndView;
+    }
+
+    @ExceptionHandler({LoginFailedException.class})
+    public ModelAndView loginFailedException(AccessDeniedException e) {
         ModelAndView modelAndView = new ModelAndView("access_denied");
         modelAndView.setStatus(HttpStatus.FORBIDDEN);
         return modelAndView;

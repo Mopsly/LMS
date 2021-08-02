@@ -9,7 +9,6 @@ import com.example.demo.dto.UserDto;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.utils.MapptingUtils.UserMapper;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -32,17 +31,21 @@ public class UserService {
     }
 
     public List<UserDto> findAll() {
-        return this.userRepository.findAll().stream().map((usr) -> {
-            return new UserDto(usr.getId(), usr.getUsername(), "", usr.getCourses(), usr.getRoles());
-        }).collect(Collectors.toList());
+        return this.userRepository.findAll().stream().map(
+                (usr) -> new UserDto(usr.getId(),
+                        usr.getUsername(),
+                        "",
+                        usr.getCourses(),
+                        usr.getRoles()))
+                .collect(Collectors.toList());
     }
 
     public UserDto findById(long id) {
-        return this.userMapper.mapUserToDto((User) this.userRepository.findById(id).orElseThrow(NotFoundException::new));
+        return userMapper.mapUserToDto((User) this.userRepository.findById(id).orElseThrow(NotFoundException::new));
     }
 
     public List<User> unassignedUsers(Long courseId) {
-        return this.userRepository.findUsersNotAssignedToCourse(courseId);
+        return userRepository.findUsersNotAssignedToCourse(courseId);
     }
 
     public void deleteById(long id) {
@@ -67,6 +70,6 @@ public class UserService {
     }
 
     public UserDto findUserByUsername(String username) {
-        return this.userMapper.mapUserToDto((User) this.userRepository.findUserByUsername(username).orElseThrow(NotFoundException::new));
+        return this.userMapper.mapUserToDto(userRepository.findUserByUsername(username).orElseThrow(NotFoundException::new));
     }
 }

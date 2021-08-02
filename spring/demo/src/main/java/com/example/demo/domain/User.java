@@ -92,14 +92,17 @@ public class User {
         if (this == o) {
             return true;
         } else if (o != null && this.getClass() == o.getClass()) {
-            User user = (User)o;
-            return this.id.equals(user.id);
-        } else {
-            return false;
+            User user = (User) o;
+            if (this.id.equals(user.id)
+                    && (this.username.equals(user.username))
+                    && (this.password.equals(user.password))) {
+                return true;
+            }
         }
+        return false;
     }
 
     public int hashCode() {
-        return Objects.hash(this.id);
+        return Objects.hash(this.id,this.username,this.password);
     }
 }
