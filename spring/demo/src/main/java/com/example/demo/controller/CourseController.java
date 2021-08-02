@@ -80,6 +80,7 @@ public class CourseController {
     }
 
     @DeleteMapping({"/{id}"})
+    @PreAuthorize("@AccessSecurityBean.hasAccessToDeleteCourse(#request)")
     public String deleteCourse(HttpServletRequest request, @PathVariable("id") Long id) {
         this.statisticsCounter.countHandlerCall("/course/{id} - delete");
         if (!request.isUserInRole("ROLE_ADMIN")) {
