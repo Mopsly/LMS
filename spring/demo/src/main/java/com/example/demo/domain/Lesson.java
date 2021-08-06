@@ -1,13 +1,20 @@
 package com.example.demo.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.*;
-
 @Entity
-@Table(name = "lessons")
+@Table(
+        name = "lessons"
+)
 public class Lesson {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,6 +28,7 @@ public class Lesson {
     private String text;
 
     @ManyToOne(optional = false)
+
     private Course course;
 
     public Lesson() {
@@ -33,10 +41,8 @@ public class Lesson {
         this.course = course;
     }
 
-
-
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -44,7 +50,7 @@ public class Lesson {
     }
 
     public String getTitle() {
-        return title;
+        return this.title;
     }
 
     public void setTitle(String title) {
@@ -52,7 +58,7 @@ public class Lesson {
     }
 
     public String getText() {
-        return text;
+        return this.text;
     }
 
     public void setText(String text) {
@@ -60,7 +66,7 @@ public class Lesson {
     }
 
     public Course getCourse() {
-        return course;
+        return this.course;
     }
 
     public void setCourse(Course course) {

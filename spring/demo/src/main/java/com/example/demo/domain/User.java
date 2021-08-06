@@ -1,8 +1,15 @@
 package com.example.demo.domain;
 
-import javax.persistence.*;
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "users")
@@ -12,10 +19,18 @@ public class User {
     private Long id;
 
     @Column
+    @NotBlank(message = "Имя пользователя должно быть заполнено")
     private String username;
+
+    @Column
+    @NotBlank(message = "Пароль должен быть заполнен")
+    private String password;
 
     @ManyToMany(mappedBy = "users")
     private Set<Course> courses;
+
+    @ManyToMany
+    private Set<Role> roles;
 
     public User() {
     }
@@ -25,8 +40,16 @@ public class User {
         this.courses = courses;
     }
 
+    public User(Long id, String username, String password, Set<Course> courses, Set<Role> roles) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.courses = courses;
+        this.roles = roles;
+    }
+
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -34,7 +57,7 @@ public class User {
     }
 
     public String getUsername() {
-        return username;
+        return this.username;
     }
 
     public void setUsername(String username) {
@@ -42,23 +65,44 @@ public class User {
     }
 
     public Set<Course> getCourses() {
-        return courses;
+        return this.courses;
     }
 
     public void setCourses(Set<Course> courses) {
         this.courses = courses;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return id.equals(user.id);
+    public String getPassword() {
+        return this.password;
     }
 
-    @Override
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Set<Role> getRoles() {
+        return this.roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        } else if (o != null && this.getClass() == o.getClass()) {
+            User user = (User) o;
+            if (this.id.equals(user.id)
+                    && (this.username.equals(user.username))
+                    && (this.password.equals(user.password))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(this.id,this.username,this.password);
     }
 }

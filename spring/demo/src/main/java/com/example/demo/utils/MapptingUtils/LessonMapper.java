@@ -5,8 +5,10 @@ import com.example.demo.domain.Lesson;
 import com.example.demo.dto.LessonDto;
 
 public class LessonMapper {
-    public static Lesson mapDtoToLesson(LessonDto lessonDto, Course course) {
+    public LessonMapper() {
+    }
 
+    public static Lesson mapDtoToLesson(LessonDto lessonDto, Course course) {
         return new Lesson(lessonDto.getId(), lessonDto.getTitle(), lessonDto.getText(), course);
     }
 

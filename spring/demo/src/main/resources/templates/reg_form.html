@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <title>Регистрация</title>
+</head>
+<body>
+
+<header th:replace="fragments/header :: header"></header>
+
+<div class="block">
+    <h1>Регистрация</h1>
+</div>
+
+<form th:object="${user}" th:method="post" th:action="@{/user/new}">
+
+
+    <div class="block">
+        <input type="hidden" th:field="*{id}">
+        <label for="user-name">Имя пользователя:</label>
+        <input type="text" name="user-name" id = user-name th:field="*{username}" >
+        <small class="hint" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">
+            Имя пользователя не должно быть пустым</small>
+        <label for="password">Пароль:</label>
+        <input type="password" id="password"  name="password" th:field="*{password}">
+        <small class="hint" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
+            Пароль не должен быть пустым</small>
+        <button class="submit-button">Создать</button>
+    </div>
+</form>
+</body>
+</html>

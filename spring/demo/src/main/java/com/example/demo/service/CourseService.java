@@ -1,52 +1,57 @@
+
+
 package com.example.demo.service;
 
 import com.example.demo.dao.CourseRepository;
 import com.example.demo.domain.Course;
-import com.example.demo.exception.NotFoundException;
 import com.example.demo.domain.User;
+import com.example.demo.exception.NotFoundException;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Component
 public class CourseService {
-    private  final CourseRepository repository;
+    private final CourseRepository repository;
 
     @Autowired
     public CourseService(CourseRepository repository) {
         this.repository = repository;
     }
 
-    public Course courseById(Long id){
-            return repository.findById(id).orElseThrow(NotFoundException::new);
+    public Course courseById(Long id) {
+        return (Course)this.repository.findById(id).orElseThrow(NotFoundException::new);
     }
 
-    public List<Course> courseByTitlePrefix(String prefix){
-        return repository.findByTitleLike(prefix + "%");
-    }
-    public void saveCourse(Course course){
-        repository.save(course);
+    public List<Course> courseByTitlePrefix(String prefix) {
+        return this.repository.findByTitleLike(prefix + "%");
     }
 
-    public List<Course> coursesByAuthor(String name){
-        List <Course> allCourses= repository.findAll();
-        return allCourses.stream().filter(course -> course.getAuthor().equals(name)).collect(Collectors.toList());
+    public void saveCourse(Course course) {
+        this.repository.save(course);
+    }
+
+    public List<Course> coursesByAuthor(String name) {
+        List<Course> allCourses = this.repository.findAll();
+        return (List)allCourses.stream().filter((course) -> {
+            return course.getAuthor().equals(name);
+        }).collect(Collectors.toList());
     }
 
     public void deleteCourse(Long id) {
-        repository.deleteById(id);
+        this.repository.deleteById(id);
     }
 
-    public void setUserOnCourse(User user,Course course){
+    public void setUserOnCourse(User user, Course course) {
         course.getUsers().add(user);
         user.getCourses().add(course);
-        repository.save(course);
+        this.repository.save(course);
     }
-    public void removeUserFromCourse(User user,Course course){
+
+    public void removeUserFromCourse(User user, Course course) {
         user.getCourses().remove(course);
         course.getUsers().remove(user);
-        repository.save(course);
+        this.repository.save(course);
     }
 }
