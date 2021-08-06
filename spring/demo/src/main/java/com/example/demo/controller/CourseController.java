@@ -4,7 +4,6 @@ import com.example.demo.Constants;
 import com.example.demo.dao.RoleRepository;
 import com.example.demo.domain.Course;
 import com.example.demo.dto.UserDto;
-import com.example.demo.exception.AccessDeniedException;
 import com.example.demo.service.CourseService;
 import com.example.demo.service.LessonService;
 import com.example.demo.service.StatisticsCounter;
@@ -42,7 +41,7 @@ public class CourseController {
     private static final Logger logger = LoggerFactory.getLogger(CourseController.class);
 
     @Autowired
-    public CourseController(CourseService courseService, UserService userService, StatisticsCounter statisticsCounter, LessonService lessonService, UserMapper userMapper, RoleRepository roleRepository) {
+    public CourseController(CourseService courseService, UserService userService, StatisticsCounter statisticsCounter, LessonService lessonService, UserMapper userMapper) {
         this.courseService = courseService;
         this.userService = userService;
         this.statisticsCounter = statisticsCounter;
@@ -65,7 +64,7 @@ public class CourseController {
     public String courseForm(Model model, @PathVariable("id") Long id) {
         this.statisticsCounter.countHandlerCall("/course/{id}");
         Course course = this.courseService.courseById(id);
-        model.addAttribute("course", CourseMapper.mapLessonToDto(course));
+        model.addAttribute("course", CourseMapper.mapCourseToDto(course));
         model.addAttribute("lessons", this.lessonService.lessonsWithoutText(id));
         model.addAttribute("users", course.getUsers());
         return "course_form";

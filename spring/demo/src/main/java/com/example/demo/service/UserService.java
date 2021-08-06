@@ -66,7 +66,8 @@ public class UserService {
             Set<Role> roles = findById(userDto.getId()).getRoles();
             userDto.setRoles(roles);
         }
-        this.userRepository.save(new User(userDto.getId(), userDto.getUsername(), this.encoder.encode(userDto.getPassword()), userDto.getCourses(), userDto.getRoles()));
+        this.userRepository.save(new User(userDto.getId(), userDto.getUsername(),
+                this.encoder.encode(userDto.getPassword()), userDto.getCourses(), userDto.getRoles()));
     }
 
     public UserDto findUserByUsername(String username) {
