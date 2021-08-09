@@ -6,7 +6,6 @@ import com.example.demo.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @ControllerAdvice
@@ -29,7 +28,7 @@ public class ExceptionController {
     }
 
     @ExceptionHandler({LoginFailedException.class})
-    public ModelAndView loginFailedException(AccessDeniedException e) {
+    public ModelAndView loginFailedException(LoginFailedException e) {
         ModelAndView modelAndView = new ModelAndView("access_denied");
         modelAndView.setStatus(HttpStatus.FORBIDDEN);
         return modelAndView;

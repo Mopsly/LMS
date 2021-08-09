@@ -31,7 +31,7 @@ public class LessonController {
     private final CourseService courseService;
 
     @Autowired
-    public LessonController(StatisticsCounter statisticsCounter, CourseService courseLister, LessonService lessonService, UserService userService) {
+    public LessonController(StatisticsCounter statisticsCounter, CourseService courseLister, LessonService lessonService, UserService userService, LessonMapper lessonMapper) {
         this.statisticsCounter = statisticsCounter;
         this.courseService = courseLister;
         this.lessonService = lessonService;
@@ -53,7 +53,8 @@ public class LessonController {
         return "lesson_form";
     }
 
-    @PostMapping(params = {"submit"})
+    @PostMapping
+//    @PostMapping(params = {"submit"})
     public String submitLessonForm(LessonDto lessonDto, Model model,
                                    BindingResult bindingResult,
                                    HttpServletRequest request) {
@@ -61,7 +62,7 @@ public class LessonController {
         if (bindingResult.hasErrors()) {
             return "lesson_form";
         } else {
-            Course course = this.courseService.courseById(lessonDto.getCourseId());
+            Course course = courseService.courseById(lessonDto.getCourseId());
             Lesson lesson = LessonMapper.mapDtoToLesson(lessonDto, course);
             this.lessonService.saveLesson(lesson);
             model.addAttribute("course", CourseMapper.mapCourseToDto(course));

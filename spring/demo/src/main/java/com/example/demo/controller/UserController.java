@@ -35,7 +35,7 @@ public class UserController {
     private final StatisticsCounter statisticsCounter;
     private final RoleService roleService;
 
-    public UserController(UserService userService, RoleRepository roleRepository, StatisticsCounter statisticsCounter, RoleService roleService) {
+    public UserController(UserService userService, StatisticsCounter statisticsCounter, RoleService roleService) {
         this.userService = userService;
         this.statisticsCounter = statisticsCounter;
         this.roleService = roleService;
