@@ -13,6 +13,8 @@ import org.mockito.Mockito;
 
 import java.util.*;
 
+import static org.junit.Assert.assertThrows;
+
 public class CourseServiceTest {
     private static CourseService courseService;
 
@@ -41,12 +43,7 @@ public class CourseServiceTest {
     }
     @Test
     public void findByIdNullTest(){
-        try {
-            Course course = courseService.courseById(1000L);
-        }
-        catch (NotFoundException e){
-            Assertions.assertThat(true);
-        }
+        assertThrows(NotFoundException.class, () -> courseService.courseById(1000L));
     }
 
     @Test

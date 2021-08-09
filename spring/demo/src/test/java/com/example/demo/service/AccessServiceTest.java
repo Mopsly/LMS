@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.Constants;
 import com.example.demo.dao.CourseRepository;
 import com.example.demo.exception.AccessDeniedException;
+import com.example.demo.exception.NotFoundException;
 import com.example.demo.service.AccessService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import javax.servlet.http.HttpServletRequest;
+
+import static org.junit.Assert.assertThrows;
 
 public class AccessServiceTest {
 
@@ -32,12 +35,7 @@ public class AccessServiceTest {
     public void hasNoAdminRightsTest(){
         Mockito.when(requestMock.isUserInRole(Constants.ADMIN)).thenReturn(false);
         AccessService service = new AccessService();
-        try{
-            service.hasAdminRights(requestMock);
-        }
-        catch (AccessDeniedException e){
-            Assertions.assertThat(true);
-        }
+        assertThrows(AccessDeniedException.class, () -> service.hasAdminRights(requestMock));
     }
 }
 
