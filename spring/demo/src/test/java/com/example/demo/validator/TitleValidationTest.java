@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.validator;
 
 import com.example.demo.annotations.Lang;
 import com.example.demo.validator.TitleCaseValidator;

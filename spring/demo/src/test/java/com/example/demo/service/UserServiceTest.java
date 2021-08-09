@@ -19,6 +19,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.HashSet;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
 public class UserServiceTest {
 
     UserService userService;
@@ -35,12 +38,14 @@ public class UserServiceTest {
         CourseService courseService =  new CourseService(courseRepositoryMock);
 
 
-        Mockito.when(userRepositoryMock.findAll()).thenReturn(users);
-        Mockito.when(userRepositoryMock.findById(1L))
+        when(userRepositoryMock.findAll()).thenReturn(users);
+        when(userRepositoryMock.findById(1L))
                 .thenReturn(java.util.Optional.of(new User(1L, "Вася", "123", new HashSet<>(), new HashSet<>())));
 
-        Mockito.when(userRepositoryMock.findUserByUsername("Вася"))
+        when(userRepositoryMock.findUserByUsername("Вася"))
                 .thenReturn(java.util.Optional.of(new User(1L, "Вася", "123", new HashSet<>(), new HashSet<>())));
+        when(userRepositoryMock.findUsersNotAssignedToCourse(any(Long.class)))
+                .thenReturn(List.of(new User(1L, "Вася", "123", new HashSet<>(), new HashSet<>())));
 
         userService = new UserService(userRepositoryMock,passwordEncoderMock,userMapper,roleRepositoryMock,courseService);
     }
@@ -61,6 +66,14 @@ public class UserServiceTest {
     @Test
     public void findByUsernameTest(){
         Assertions.assertThat(userService.findUserByUsername("Вася")).extracting("username").isEqualTo("Вася");
+    }
+
+    @Test
+    public void unassignedUsersTest(){
+        Assertions.assertThat(userService.unassignedUsers(1L).size()).isEqualTo(1);
+        Assertions
+                .assertThat(userService.unassignedUsers(1L))
+                .extracting("username").contains("Вася");
     }
 
 }
