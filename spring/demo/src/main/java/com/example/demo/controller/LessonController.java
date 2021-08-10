@@ -54,7 +54,6 @@ public class LessonController {
     }
 
     @PostMapping
-//    @PostMapping(params = {"submit"})
     public String submitLessonForm(LessonDto lessonDto, Model model,
                                    BindingResult bindingResult,
                                    HttpServletRequest request) {
