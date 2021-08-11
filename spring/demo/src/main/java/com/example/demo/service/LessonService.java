@@ -18,7 +18,7 @@ public class LessonService {
     }
 
     public Lesson lessonById(Long id) {
-        return (Lesson)this.repository.findById(id).orElseThrow(NotFoundException::new);
+        return repository.findById(id).orElseThrow(NotFoundException::new);
     }
 
     public void saveLesson(Lesson course) {

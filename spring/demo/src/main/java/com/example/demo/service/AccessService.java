@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 
 @Component("AccessSecurityBean")
+public
 class AccessService {
     public boolean hasAdminRights(HttpServletRequest authentication) {
         if (!authentication.isUserInRole(Constants.ADMIN)){

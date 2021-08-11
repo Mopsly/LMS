@@ -4,7 +4,6 @@ import com.example.demo.Constants;
 import com.example.demo.dao.RoleRepository;
 import com.example.demo.domain.Course;
 import com.example.demo.dto.UserDto;
-import com.example.demo.exception.AccessDeniedException;
 import com.example.demo.service.CourseService;
 import com.example.demo.service.LessonService;
 import com.example.demo.service.StatisticsCounter;
@@ -17,11 +16,14 @@ import java.util.Collections;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.aspectj.lang.annotation.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,6 +32,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.WebApplicationContext;
 
 @Controller
 @RequestMapping({"/course"})
@@ -41,14 +44,16 @@ public class CourseController {
     private final UserMapper userMapper;
     private static final Logger logger = LoggerFactory.getLogger(CourseController.class);
 
+
     @Autowired
-    public CourseController(CourseService courseService, UserService userService, StatisticsCounter statisticsCounter, LessonService lessonService, UserMapper userMapper, RoleRepository roleRepository) {
+    public CourseController(CourseService courseService, UserService userService, StatisticsCounter statisticsCounter, LessonService lessonService, UserMapper userMapper) {
         this.courseService = courseService;
         this.userService = userService;
         this.statisticsCounter = statisticsCounter;
         this.lessonService = lessonService;
         this.userMapper = userMapper;
     }
+
 
     @GetMapping
     public String courseTable(Principal principal, Model model, @RequestParam(name = "titlePrefix", required = false) String titlePrefix) {
@@ -65,7 +70,7 @@ public class CourseController {
     public String courseForm(Model model, @PathVariable("id") Long id) {
         this.statisticsCounter.countHandlerCall("/course/{id}");
         Course course = this.courseService.courseById(id);
-        model.addAttribute("course", CourseMapper.mapLessonToDto(course));
+        model.addAttribute("course", CourseMapper.mapCourseToDto(course));
         model.addAttribute("lessons", this.lessonService.lessonsWithoutText(id));
         model.addAttribute("users", course.getUsers());
         return "course_form";
@@ -87,7 +92,7 @@ public class CourseController {
         return "redirect:/course";
     }
 
-    @PostMapping(params = {"submit"})
+    @PostMapping
     @PreAuthorize("@AccessSecurityBean.hasAdminRights(#request)")
     public String submitCourseForm(@Valid Course course, HttpServletRequest request, BindingResult bindingResult) {
         statisticsCounter.countHandlerCall("/course/submit");

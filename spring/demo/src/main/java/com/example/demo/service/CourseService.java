@@ -21,7 +21,7 @@ public class CourseService {
     }
 
     public Course courseById(Long id) {
-        return (Course)this.repository.findById(id).orElseThrow(NotFoundException::new);
+        return repository.findById(id).orElseThrow(NotFoundException::new);
     }
 
     public List<Course> courseByTitlePrefix(String prefix) {
@@ -34,7 +34,7 @@ public class CourseService {
 
     public List<Course> coursesByAuthor(String name) {
         List<Course> allCourses = this.repository.findAll();
-        return (List)allCourses.stream().filter((course) -> {
+        return allCourses.stream().filter((course) -> {
             return course.getAuthor().equals(name);
         }).collect(Collectors.toList());
     }
