@@ -4,15 +4,7 @@ import com.example.demo.annotations.Lang;
 import com.example.demo.annotations.TitleCase;
 import java.util.List;
 import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
 @Entity
@@ -38,8 +30,12 @@ public class Course {
             cascade = {CascadeType.ALL}
     )
     private List<Lesson> lessons;
+
     @ManyToMany
     private Set<User> users;
+
+    @OneToOne(mappedBy = "course", cascade = CascadeType.REMOVE)
+    private CourseImage courseImage;
 
     public Course() {
     }
@@ -48,6 +44,15 @@ public class Course {
         this.id = id;
         this.author = author;
         this.title = title;
+    }
+
+    public Course(Long id, String author, String title, List<Lesson> lessons, Set<User> users, CourseImage courseImage) {
+        this.id = id;
+        this.author = author;
+        this.title = title;
+        this.lessons = lessons;
+        this.users = users;
+        this.courseImage = courseImage;
     }
 
     public Set<User> getUsers() {
@@ -88,5 +93,13 @@ public class Course {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public CourseImage getCourseImage() {
+        return courseImage;
+    }
+
+    public void setCourseImage(CourseImage courseImage) {
+        this.courseImage = courseImage;
     }
 }

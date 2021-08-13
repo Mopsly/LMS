@@ -1,9 +1,8 @@
 package com.example.demo.controller;
 
-import com.example.demo.exception.AccessDeniedException;
-import com.example.demo.exception.LoginFailedException;
-import com.example.demo.exception.NotFoundException;
+import com.example.demo.exception.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
@@ -32,5 +31,16 @@ public class ExceptionController {
         ModelAndView modelAndView = new ModelAndView("access_denied");
         modelAndView.setStatus(HttpStatus.FORBIDDEN);
         return modelAndView;
+    }
+    @ExceptionHandler({InternalServerError.class})
+    public ModelAndView serviceErrorException(InternalServerError e) {
+        ModelAndView modelAndView = new ModelAndView("access_denied");
+        modelAndView.setStatus(HttpStatus.FORBIDDEN);
+        return modelAndView;
+    }
+
+    @ExceptionHandler(MediaNotFoundException.class)
+    public ResponseEntity<Void> mediaNotFoundExceptionHandler(MediaNotFoundException ex) {
+        return ResponseEntity.notFound().build();
     }
 }

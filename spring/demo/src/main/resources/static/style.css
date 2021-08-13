@@ -157,3 +157,9 @@ a{
 	color: #8A323C;
 	border-radius: 10px;
 }
+
+.header-img {
+	max-width: 50px;
+	max-height: 50px;
+	border-radius: 50%;
+}

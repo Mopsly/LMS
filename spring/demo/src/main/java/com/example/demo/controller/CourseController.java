@@ -1,13 +1,11 @@
 package com.example.demo.controller;
 
 import com.example.demo.Constants;
-import com.example.demo.dao.RoleRepository;
 import com.example.demo.domain.Course;
 import com.example.demo.dto.UserDto;
-import com.example.demo.service.CourseService;
-import com.example.demo.service.LessonService;
-import com.example.demo.service.StatisticsCounter;
-import com.example.demo.service.UserService;
+import com.example.demo.exception.InternalServerError;
+import com.example.demo.exception.MediaNotFoundException;
+import com.example.demo.service.*;
 import com.example.demo.utils.MapptingUtils.CourseMapper;
 import com.example.demo.utils.MapptingUtils.UserMapper;
 
@@ -16,23 +14,18 @@ import java.util.Collections;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.aspectj.lang.annotation.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping({"/course"})
@@ -42,16 +35,18 @@ public class CourseController {
     private final StatisticsCounter statisticsCounter;
     private final LessonService lessonService;
     private final UserMapper userMapper;
+    private final CourseImageStorageService courseImageStorageService;
     private static final Logger logger = LoggerFactory.getLogger(CourseController.class);
 
 
     @Autowired
-    public CourseController(CourseService courseService, UserService userService, StatisticsCounter statisticsCounter, LessonService lessonService, UserMapper userMapper) {
+    public CourseController(CourseService courseService, UserService userService, StatisticsCounter statisticsCounter, LessonService lessonService, UserMapper userMapper, CourseImageStorageService courseImageStorageService) {
         this.courseService = courseService;
         this.userService = userService;
         this.statisticsCounter = statisticsCounter;
         this.lessonService = lessonService;
         this.userMapper = userMapper;
+        this.courseImageStorageService = courseImageStorageService;
     }
 
 
@@ -132,6 +127,33 @@ public class CourseController {
         Course course = this.courseService.courseById(courseId);
         this.courseService.removeUserFromCourse(this.userMapper.mapDtoToUser(userDto), course);
         return "redirect:/course/{courseId}";
+    }
+
+    @PostMapping("/avatar/{id}")
+    public String updateAvatarImage(@RequestParam("avatar") MultipartFile avatar,
+                                    @PathVariable("id") Long courseId){
+        logger.info("File name {}, file content type {}, file size {}",
+                avatar.getOriginalFilename(),avatar.getContentType(),avatar.getSize());
+        try {
+            courseImageStorageService.save(courseId, avatar.getContentType(), avatar.getInputStream());
+        } catch (Exception ex) {
+            logger.info("", ex);
+            throw new InternalServerError();
+        }
+        return "redirect:/course/{id}";
+    }
+
+    @GetMapping("/avatar/{id}")
+    @ResponseBody
+    public ResponseEntity<byte[]> avatarImage(@PathVariable("id") Long courseId) {
+        String contentType = courseImageStorageService.getContentTypeByCourse(courseId)
+                .orElseThrow(MediaNotFoundException::new);
+        byte[] data = courseImageStorageService.getAvatarImageByCourse(courseId)
+                .orElseThrow(MediaNotFoundException::new);
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .body(data);
     }
 }
 
