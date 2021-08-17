@@ -34,6 +34,8 @@ public class UserService {
         return this.userRepository.findAll().stream().map(
                 (usr) -> new UserDto(usr.getId(),
                         usr.getUsername(),
+                        usr.getEmail(),
+                        usr.getNickname(),
                         "",
                         usr.getCourses(),
                         usr.getRoles()))
@@ -66,7 +68,7 @@ public class UserService {
             Set<Role> roles = findById(userDto.getId()).getRoles();
             userDto.setRoles(roles);
         }
-        this.userRepository.save(new User(userDto.getId(), userDto.getUsername(),
+        this.userRepository.save(new User(userDto.getId(), userDto.getUsername(), userDto.getEmail(), userDto.getNickname(),
                 this.encoder.encode(userDto.getPassword()), userDto.getCourses(), userDto.getRoles()));
     }
 

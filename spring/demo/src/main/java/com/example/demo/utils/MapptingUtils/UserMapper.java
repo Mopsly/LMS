@@ -16,10 +16,13 @@ public class UserMapper {
     }
 
     public User mapDtoToUser(UserDto userDto) {
-        return new User(userDto.getId(), userDto.getUsername(), this.encoder.encode(userDto.getPassword()), userDto.getCourses(), userDto.getRoles());
+        return new User(userDto.getId(), userDto.getUsername(), userDto.getEmail(), userDto.getNickname(),
+                encoder.encode(userDto.getPassword()), userDto.getCourses(), userDto.getRoles());
     }
 
     public UserDto mapUserToDto(User user) {
-        return new UserDto(user.getId(), user.getUsername(), "***", user.getCourses(), user.getRoles());
+        return new UserDto(user.getId(), user.getUsername(), user.getEmail(), user.getNickname(),
+                "***", user.getCourses(),
+                user.getRoles());
     }
 }

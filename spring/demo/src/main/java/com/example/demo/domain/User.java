@@ -1,5 +1,7 @@
 package com.example.demo.domain;
 
+import org.hibernate.validator.constraints.UniqueElements;
+
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.*;
@@ -15,6 +17,13 @@ public class User {
     @Column
     @NotBlank(message = "Имя пользователя должно быть заполнено")
     private String username;
+
+    @Column
+    @NotBlank(message = "Адрес электронной почты должен быть заполнен")
+    private String email;
+
+    @Column
+    private String nickname;
 
     @Column
     @NotBlank(message = "Пароль должен быть заполнен")
@@ -37,10 +46,12 @@ public class User {
         this.courses = courses;
     }
 
-    public User(Long id, String username, String password, Set<Course> courses, Set<Role> roles) {
+    public User(Long id, String username, String email, String nickname, String password, Set<Course> courses, Set<Role> roles) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.email = email;
+        this.nickname = nickname;
         this.courses = courses;
         this.roles = roles;
     }
@@ -48,6 +59,19 @@ public class User {
     public User(Long id, String username, String password, Set<Course> courses, Set<Role> roles, AvatarImage avatarImage) {
         this.id = id;
         this.username = username;
+        this.password = password;
+        this.courses = courses;
+        this.roles = roles;
+        this.avatarImage = avatarImage;
+    }
+
+    public User(Long id, String username, String email, String nickname,
+                String password, Set<Course> courses, Set<Role> roles,
+                AvatarImage avatarImage) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.nickname = nickname;
         this.password = password;
         this.courses = courses;
         this.roles = roles;
@@ -118,5 +142,21 @@ public class User {
 
     public void setAvatarImage(AvatarImage avatarImage) {
         this.avatarImage = avatarImage;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 }
