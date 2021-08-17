@@ -7,6 +7,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Set;
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "courses")
@@ -30,6 +32,9 @@ public class Course {
     @ManyToMany
     private Set<User> users;
 
+    @OneToOne(mappedBy = "course", cascade = CascadeType.REMOVE)
+    private CourseImage courseImage;
+
     public Course() {
     }
 
@@ -39,6 +44,14 @@ public class Course {
         this.title = title;
     }
 
+    public Course(Long id, String author, String title, List<Lesson> lessons, Set<User> users, CourseImage courseImage) {
+        this.id = id;
+        this.author = author;
+        this.title = title;
+        this.lessons = lessons;
+        this.users = users;
+        this.courseImage = courseImage;
+    }
 
     public Set<User> getUsers() {
         return users;
@@ -78,5 +91,13 @@ public class Course {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public CourseImage getCourseImage() {
+        return courseImage;
+    }
+
+    public void setCourseImage(CourseImage courseImage) {
+        this.courseImage = courseImage;
     }
 }

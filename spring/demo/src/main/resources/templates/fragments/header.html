@@ -24,8 +24,13 @@
             Зарегистрироваться
         </a>
     </div>
+
     <form class="float-right" sec:authorize="isAuthenticated()"
           th:method="post" th:action="@{/logout}">
+
+        <a th:href="@{/profile}">
+            <img class="header-img" th:src="@{/profile/avatar}" alt="User profile">
+        </a>
         <button class="header-button">
             Выйти, как <span sec:authentication="principal.username">Username</span>
         </button>

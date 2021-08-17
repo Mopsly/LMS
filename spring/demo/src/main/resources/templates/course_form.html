@@ -10,17 +10,24 @@
 <body>
 <header th:replace="fragments/header :: header"></header>
 <div class="block">
-    <h1>Создать курс</h1>
+    <h1 th:field="${course.title}">Страница курса</h1>
 </div>
+
 <div class="block">
-    <img src="" , title="course pic">
+    <img th:src="@{/course/avatar/{id}(id = ${course.id})}"  title="course pic">
 </div>
+<form th:method="post" th:action="@{/course/avatar/{id}(id = ${course.id})}"
+      enctype="multipart/form-data" sec:authorize="hasRole('ADMIN')">
+    <div class="block">
+        <label for="pic">Выберите обложку курса</label>
+        <input id="avatar" name="avatar" type="file">
+        <button class="submit-button">Обновить</button>
+    </div>
+</form>
+
 <form th:object="${course}" th:method="post" th:action="@{/course}">
     <div class="block">
         <input type="hidden" th:field="*{id}">
-        <label for="pic">Выберите обложку курса</label>
-        <input type="file" name="pic">
-        <button class="submit-button">Обновить</button>
         <label for="course-name">Название:</label>
         <input type="text" name="course-name" th:field="*{title}">
         <small class="hint" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">
@@ -31,7 +38,8 @@
         <small class="hint" th:if="${#fields.hasErrors('author')}" th:errors="*{author}">
             Автор курса должен быть заполнен
         </small>
-        <button class="submit-button" name="submit" value="submit">Сохранить</button>
+        <button class="submit-button" sec:authorize="hasRole('ADMIN')"
+                name="submit" value="submit">Сохранить</button>
     </div>
 </form>
 

@@ -2,13 +2,7 @@ package com.example.demo.domain;
 
 import java.util.Objects;
 import java.util.Set;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
 @Entity
@@ -32,6 +26,9 @@ public class User {
     @ManyToMany
     private Set<Role> roles;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private AvatarImage avatarImage;
+
     public User() {
     }
 
@@ -46,6 +43,15 @@ public class User {
         this.password = password;
         this.courses = courses;
         this.roles = roles;
+    }
+
+    public User(Long id, String username, String password, Set<Course> courses, Set<Role> roles, AvatarImage avatarImage) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.courses = courses;
+        this.roles = roles;
+        this.avatarImage = avatarImage;
     }
 
     public Long getId() {
@@ -104,5 +110,13 @@ public class User {
 
     public int hashCode() {
         return Objects.hash(this.id,this.username,this.password);
+    }
+
+    public AvatarImage getAvatarImage() {
+        return avatarImage;
+    }
+
+    public void setAvatarImage(AvatarImage avatarImage) {
+        this.avatarImage = avatarImage;
     }
 }
