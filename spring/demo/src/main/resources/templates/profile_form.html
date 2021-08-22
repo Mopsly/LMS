@@ -16,15 +16,47 @@
 </div>
 
 <div class="block">
-    <form th:method="post" th:action="@{/profile/avatar}" enctype="multipart/form-data">
-        <div>
-            <label for="avatar">Select avatar picture to upload</label>
-            <input id="avatar" name="avatar" type="file"/>
+    <div class="row">
+        <div class="column">
+            <form th:method="post" th:action="@{/profile/avatar}" enctype="multipart/form-data">
+                <h1>Личная информация</h1>
+                <label for="user-name">Имя пользователя:</label>
+                <input type="text" name="user-name" id = "user-name" >
+<!--                <small class="hint" th:if="${#fields.hasErrors('username')}">-->
+<!--                    Имя пользователя не должно быть пустым</small>-->
+                <label for="email">E-Mail:</label>
+                <input type="text" name="email" id = "email"  >
+<!--                <small class="hint" th:if="${#fields.hasErrors('email')}">-->
+<!--                    Неверный формат адреса электронной почты </small>-->
+                <label for="nick-name">Отображаемое имя:</label>
+                <input type="text" name="nick-name" id = "nick-name"  >
+<!--                <small class="hint" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}">-->
+<!--                    Имя пользователя не должно быть пустым</small>-->
+
+                <label for="password">Пароль:</label>
+                <input type="password" id="password"  name="password" >
+<!--                <small class="hint" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">-->
+<!--                    Пароль не должен быть пустым</small>-->
+                <div>
+                    <label for="avatar">Select avatar picture to upload</label>
+                    <input id="avatar" name="avatar" type="file"/>
+                </div>
+                <div>
+                    <button class="dark-button">Update avatar</button>
+                </div>
+            </form>
         </div>
-        <div>
-            <button class="submit-button">Update avatar</button>
+        <div class="column">
+            <h1>Информация о курсах</h1>
+            <div th:unless="${user.courses.empty}" th:each="course : ${user.courses}">
+                <label for="user-course" >
+                    <a th:text="${course.title}" th:href ="@{/course/{id}(id = ${course.id})}">Course:</a>
+                </label>
+                <progress id="user-course" max="100" value="69"> 69%</progress>
+            </div>
         </div>
-    </form>
+    </div>
+
 </div>
 </body>
 </html>

@@ -1,10 +1,12 @@
 package com.example.demo.controller;
 
+import com.example.demo.domain.User;
 import com.example.demo.dto.UserDto;
 import com.example.demo.exception.InternalServerError;
 import com.example.demo.exception.MediaNotFoundException;
-import com.example.demo.exception.NotFoundException;
 import com.example.demo.service.AvatarStorageService;
+import com.example.demo.service.UserService;
+import com.example.demo.utils.MapptingUtils.UserMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -23,14 +25,16 @@ import java.security.Principal;
 public class ProfileController {
     private static final Logger logger = LoggerFactory.getLogger(ProfileController.class);
     private final AvatarStorageService avatarStorageService;
+    private final UserService userService;
 
-    public ProfileController(AvatarStorageService avatarStorageService) {
+    public ProfileController(AvatarStorageService avatarStorageService, UserService userService) {
         this.avatarStorageService = avatarStorageService;
+        this.userService = userService;
     }
 
     @GetMapping()
-    public String profileForm(Principal principal, Model model){
-        model.addAttribute("user",new UserDto());
+    public String profileForm(Principal principal, Model model,Authentication auth){
+        model.addAttribute("user",userService.getUserByUsername(auth.getName()));
         return "profile_form";
     }
 
