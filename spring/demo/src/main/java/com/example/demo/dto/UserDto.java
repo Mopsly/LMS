@@ -4,6 +4,8 @@ package com.example.demo.dto;
 
 import com.example.demo.annotations.FieldMatch;
 import com.example.demo.annotations.LatinAndSymbols;
+import com.example.demo.annotations.UniqueEmail;
+import com.example.demo.annotations.UniqueUsername;
 import com.example.demo.domain.Course;
 import com.example.demo.domain.Role;
 import org.springframework.data.annotation.Transient;
@@ -18,12 +20,13 @@ public class UserDto {
     private Long id;
 
     @NotBlank(message = "Имя пользователя должно быть заполнено")
-//    @UniqueUsername
+    @UniqueUsername
 //    @LatinAndSymbols(message = "Логин должен включать в себя латиницу и/или спецсимволы")
     private String username;
 
+    @NotBlank(message = "Email должен быть указан")
     @Email(message = "Неверный формат  почты")
-//    @UniqueEmail(message = "Указанная электронная почта уже занята")
+    @UniqueEmail(message = "Указанная электронная почта уже занята")
     private String email;
     private String nickname;
 

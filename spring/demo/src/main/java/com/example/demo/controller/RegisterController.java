@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.UserDto;
 import com.example.demo.exception.InternalServerError;
-import com.example.demo.exception.LoginFailedException;
 import com.example.demo.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,7 +9,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -31,7 +29,6 @@ public class RegisterController {
         this.authorisationService = authorisationService;
     }
 
-
     @GetMapping
     public String regForm(Model model) {
         this.statisticsCounter.countHandlerCall("/register");
@@ -39,12 +36,10 @@ public class RegisterController {
         return "reg_form";
     }
 
-
-
     @PostMapping
     public String submitRegForm(@Valid @ModelAttribute("user") UserDto user,
-                                @RequestParam("avatar") MultipartFile avatar,
-                                BindingResult bindingResult) {
+                                BindingResult bindingResult,
+                                @RequestParam("avatar") MultipartFile avatar) {
         if (bindingResult.hasErrors()) {
             return "reg_form";
         } else {

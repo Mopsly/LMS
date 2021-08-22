@@ -1,10 +1,8 @@
 package com.example.demo.validator;
 
-import com.example.demo.annotations.UniqueEmail;
 import com.example.demo.annotations.UniqueUsername;
-import com.example.demo.service.UserService;
+import com.example.demo.dao.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -12,7 +10,7 @@ import javax.validation.ConstraintValidatorContext;
 public class UniqueUsernameValidator implements ConstraintValidator<UniqueUsername, String> {
 
     @Autowired
-    private  UserService userService;
+    private UserRepository userRepository;
 
     @Override
     public void initialize(UniqueUsername constraintAnnotation) {
@@ -21,7 +19,6 @@ public class UniqueUsernameValidator implements ConstraintValidator<UniqueUserna
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {
-        return userService.getUserByUsername(value) == null;
+        return userRepository.getUserByUsername(value) == null;
     }
-
 }
