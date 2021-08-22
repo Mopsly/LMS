@@ -21,18 +21,18 @@ public class UserDto {
 
     @NotBlank(message = "Имя пользователя должно быть заполнено")
     @UniqueUsername
-//    @LatinAndSymbols(message = "Логин должен включать в себя латиницу и/или спецсимволы")
+    @LatinAndSymbols(message = "Логин должен включать в себя латиницу и/или спецсимволы")
     private String username;
 
     @NotBlank(message = "Email должен быть указан")
     @Email(message = "Неверный формат  почты")
-    @UniqueEmail(message = "Указанная электронная почта уже занята")
+    @UniqueEmail(message = "Данный email уже зарегистрирован. Перейдите в форму авторизации и нажмите на кнопку восстановления пароля")
     private String email;
     private String nickname;
 
     @NotBlank(message = "Пароль должен быть заполнен")
     @Size(min = 8, message = "Пароль не должен состоять менее чем из 8 символов")
-//    @LatinAndSymbols(message = "Пароль должен включать в себя латиницу и/или спецсимволы")
+    @LatinAndSymbols(message = "Пароль должен включать в себя латиницу и/или спецсимволы")
     private String password;
 
     @Transient

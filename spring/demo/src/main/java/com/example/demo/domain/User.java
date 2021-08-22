@@ -1,15 +1,8 @@
 package com.example.demo.domain;
 
-import com.example.demo.annotations.LatinAndSymbols;
-import com.example.demo.annotations.UniqueEmail;
-import com.example.demo.annotations.UniqueUsername;
-import org.hibernate.validator.constraints.UniqueElements;
-
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "users")
@@ -20,21 +13,15 @@ public class User {
     private Long id;
 
     @Column
-    @NotBlank(message = "Имя пользователя должно быть заполнено")
-//    @UniqueUsername
     private String username;
 
     @Column
-    @NotBlank(message = "Адрес электронной почты должен быть заполнен")
-    @Email(message = "Неверный формат электронной почты")
-//    @UniqueEmail(message = "Указанная электронная почта уже занята")
     private String email;
 
     @Column
     private String nickname;
 
     @Column
-    @NotBlank(message = "Пароль должен быть заполнен")
     private String password;
 
     @ManyToMany(mappedBy = "users")
