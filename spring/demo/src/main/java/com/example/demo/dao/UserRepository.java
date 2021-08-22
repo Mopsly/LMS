@@ -18,4 +18,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findUsersNotAssignedToCourse(@Param("courseId") long courseId);
 
     Optional<User> findUserByUsername(String username);
+    User getUserByUsername(String username);
+    User getUserByEmail(String email);
+
 }

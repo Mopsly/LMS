@@ -129,7 +129,7 @@ public class CourseControllerTest {
     @Test
     public void assignCourseTest() throws Exception {
         Course testCourse = new Course(1L, "Author", "Title");
-        UserDto user = new UserDto(1L, "User","email","nickname", "password", new HashSet<>(), new HashSet<>());
+        UserDto user = new UserDto(1L, "User","email","nickname", "password","password", new HashSet<>(), new HashSet<>());
         when(courseService.courseById(any(Long.class))).thenReturn(testCourse);
 
         when(userService.findUserByUsername(any())).thenReturn(user);

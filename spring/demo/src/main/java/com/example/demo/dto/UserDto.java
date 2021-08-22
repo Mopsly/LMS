@@ -2,33 +2,50 @@
 
 package com.example.demo.dto;
 
+import com.example.demo.annotations.FieldMatch;
+import com.example.demo.annotations.LatinAndSymbols;
 import com.example.demo.domain.Course;
 import com.example.demo.domain.Role;
+import org.springframework.data.annotation.Transient;
 
-import javax.persistence.Column;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.Set;
 
+@FieldMatch(first = "password", second = "passwordConfirm", message = "The password fields must match")
 public class UserDto {
     private Long id;
 
     @NotBlank(message = "Имя пользователя должно быть заполнено")
+//    @UniqueUsername
+//    @LatinAndSymbols(message = "Логин должен включать в себя латиницу и/или спецсимволы")
     private String username;
+
+    @Email(message = "Неверный формат  почты")
+//    @UniqueEmail(message = "Указанная электронная почта уже занята")
     private String email;
     private String nickname;
 
     @NotBlank(message = "Пароль должен быть заполнен")
+    @Size(min = 8, message = "Пароль не должен состоять менее чем из 8 символов")
+//    @LatinAndSymbols(message = "Пароль должен включать в себя латиницу и/или спецсимволы")
     private String password;
+
+    @Transient
+    private String passwordConfirm;
+
     private Set<Course> courses;
     private Set<Role> roles;
 
     public UserDto() {
     }
 
-    public UserDto(Long id, String username, String email, String nickname, String password, Set<Course> courses, Set<Role> roles) {
+    public UserDto(Long id, String username, String email, String nickname, String password, String passwordConfirm, Set<Course> courses, Set<Role> roles) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.passwordConfirm = passwordConfirm;
         this.courses = courses;
         this.roles = roles;
         this.email = email;
@@ -57,6 +74,14 @@ public class UserDto {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getPasswordConfirm() {
+        return passwordConfirm;
+    }
+
+    public void setPasswordConfirm(String passwordConfirm) {
+        this.passwordConfirm = passwordConfirm;
     }
 
     public Set<Course> getCourses() {

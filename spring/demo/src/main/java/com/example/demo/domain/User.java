@@ -1,10 +1,14 @@
 package com.example.demo.domain;
 
+import com.example.demo.annotations.LatinAndSymbols;
+import com.example.demo.annotations.UniqueEmail;
+import com.example.demo.annotations.UniqueUsername;
 import org.hibernate.validator.constraints.UniqueElements;
 
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 @Entity
@@ -12,14 +16,18 @@ import javax.validation.constraints.NotBlank;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JoinColumn(name="id")
     private Long id;
 
     @Column
     @NotBlank(message = "Имя пользователя должно быть заполнено")
+//    @UniqueUsername
     private String username;
 
     @Column
     @NotBlank(message = "Адрес электронной почты должен быть заполнен")
+    @Email(message = "Неверный формат электронной почты")
+//    @UniqueEmail(message = "Указанная электронная почта уже занята")
     private String email;
 
     @Column
@@ -37,6 +45,9 @@ public class User {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
     private AvatarImage avatarImage;
+
+    @OneToOne(mappedBy = "user",cascade = CascadeType.REMOVE)
+    private Authorisation authorisation;
 
     public User() {
     }
@@ -76,6 +87,19 @@ public class User {
         this.courses = courses;
         this.roles = roles;
         this.avatarImage = avatarImage;
+    }
+
+    public User(Long id, String username, String email, String nickname, String password, Set<Course> courses,
+                Set<Role> roles, AvatarImage avatarImage, Authorisation authorisation) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.nickname = nickname;
+        this.password = password;
+        this.courses = courses;
+        this.roles = roles;
+        this.avatarImage = avatarImage;
+        this.authorisation = authorisation;
     }
 
     public Long getId() {
@@ -158,5 +182,13 @@ public class User {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public Authorisation getAuthorisation() {
+        return authorisation;
+    }
+
+    public void setAuthorisation(Authorisation authorisation) {
+        this.authorisation = authorisation;
     }
 }

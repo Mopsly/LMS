@@ -14,7 +14,7 @@
     <h1>Регистрация</h1>
 </div>
 
-<form th:object="${user}" th:method="post" th:action="@{/user/new}">
+<form th:object="${user}" th:method="post" th:action="@{/register}" enctype="multipart/form-data">
 
 
     <div class="block">
@@ -37,8 +37,10 @@
         <small class="hint" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
             Пароль не должен быть пустым</small>
         <label for="password-again">Пароль еще раз:</label>
-        <input type="password-again" id="password-again"  name="password-again">
-        <small class="hint" >Пароли должны совпадать</small>
+        <input type="password" id="password-again"  name="password-again"th:field="*{passwordConfirm}">
+        <small class="hint" th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}">
+            Пароли должны совпадать
+        </small>
         <div>
             <label for="avatar">Аватар профиля:</label>
             <input id="avatar" name="avatar" type="file"/>

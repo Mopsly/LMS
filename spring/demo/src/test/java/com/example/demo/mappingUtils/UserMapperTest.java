@@ -35,7 +35,7 @@ public class UserMapperTest {
 
     @Test
     public void dtoToUserTest(){
-        UserDto userDto = new UserDto(1L,"username","email","nickname","123",new HashSet<>(),new HashSet<>());
+        UserDto userDto = new UserDto(1L,"username","email","nickname","123","123",new HashSet<>(),new HashSet<>());
         User user =  userMapper.mapDtoToUser(userDto);
 
         Assertions.assertThat(user.getId()).isEqualTo(userDto.getId());

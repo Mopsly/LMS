@@ -13,10 +13,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@Configurable
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
@@ -36,7 +38,7 @@ public class UserService {
                         usr.getUsername(),
                         usr.getEmail(),
                         usr.getNickname(),
-                        "",
+                        "","",
                         usr.getCourses(),
                         usr.getRoles()))
                 .collect(Collectors.toList());
@@ -72,7 +74,11 @@ public class UserService {
                 this.encoder.encode(userDto.getPassword()), userDto.getCourses(), userDto.getRoles()));
     }
 
-    public UserDto findUserByUsername(String username) {
+    public UserDto getUserByUsername(String username) {
+        return this.userMapper.mapUserToDto(userRepository.getUserByUsername(username));
+    }
+    public UserDto findUserByUsername(String username)
+    {
         return this.userMapper.mapUserToDto(userRepository.findUserByUsername(username).orElseThrow(NotFoundException::new));
     }
 }

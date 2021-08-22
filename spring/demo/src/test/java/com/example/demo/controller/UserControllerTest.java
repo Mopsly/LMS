@@ -38,7 +38,7 @@ public class UserControllerTest {
 
     @Test
     public void userFormTest() throws Exception{
-        UserDto user = new UserDto(1L,"user","email", "nickname" ,"password",new HashSet<>(),new HashSet<>());
+        UserDto user = new UserDto(1L,"user","email", "nickname" ,"password","password",new HashSet<>(),new HashSet<>());
         when(userService.findUserByUsername(any())).thenReturn(user);
         mockMvc.perform(get("/user"))
                 .andExpect(status().isOk())
@@ -46,7 +46,7 @@ public class UserControllerTest {
     }
     @Test
     public void userFormByIdTest() throws Exception{
-        UserDto user = new UserDto(1L,"user","email", "nickname" ,"password",new HashSet<>(),new HashSet<>());
+        UserDto user = new UserDto(1L,"user","email", "nickname" ,"password","password",new HashSet<>(),new HashSet<>());
         when(userService.findById(any(Long.class))).thenReturn(user);
         mockMvc
                 .perform(get("/user/{id}",1L))
@@ -64,7 +64,7 @@ public class UserControllerTest {
 
     @Test
     public void submitNewUserLoginErrorTest() throws Exception {
-        UserDto user = new UserDto(1L,"admin","email","nickname","123",new HashSet<>(),new HashSet<>());
+        UserDto user = new UserDto(1L,"admin","email","nickname","123","123",new HashSet<>(),new HashSet<>());
 
         mockMvc
                 .perform(post("/user/new")
@@ -75,7 +75,7 @@ public class UserControllerTest {
 
     @Test
     public void submitUserFormTest() throws Exception {
-        UserDto user = new UserDto(1L,"admin","email","nickname","123",new HashSet<>(),new HashSet<>());
+        UserDto user = new UserDto(1L,"admin","email","nickname","123","123",new HashSet<>(),new HashSet<>());
         mockMvc
                 .perform(post("/user")
                         .with(csrf())
