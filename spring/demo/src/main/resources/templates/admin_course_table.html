@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	  			xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" th:href="@{/style.css}">
+	<title>Courses</title>
+</head>
+
+<body>
+	<header th:replace="fragments/header :: header"></header>
+	<div class="block">
+		<h1>Админка - Курсы</h1>
+	</div>
+
+	<div class="block">
+		<h2>Создать</h2>
+		<form class="inline" th:method="get" th:action="@{/course/new}">
+			<button class="table-button" type="submit">Курс</button>
+		</form>
+		<form class="inline" th:method="get" th:action="@{/module/new}">
+			<button class="table-button" type="submit">Модуль</button>
+		</form>
+		<form class="inline" th:method="get" th:action="@{/theme/new}">
+			<button class="table-button" type="submit">Тема</button>
+		</form>
+		<form class="inline" th:method="get" th:action="@{/user/new}">
+			<button class="table-button" type="submit">Пользователь</button>
+		</form>
+	</div>
+
+	<div class="block">
+		<form>
+			<label for="titlePrefix">Поиск курса по названию:</label>
+			<input type="text" id="titlePrefix" name="titlePrefix" th:value="${param.titlePrefix}">
+			<button class="submit-button">Найти</button>
+		</form>
+	</div>
+
+	<div class="block">
+			<table>
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>Название</th>
+						<th>Автор</th>
+						<th>Редактировать/удалить</th>
+					</tr>
+				</thead>
+				<tbody>
+				<tr th:unless="${courses.empty}" th:each ="course : ${courses}">
+					<td th:text="${course.id}">1</td>
+					<td>
+						<a th:text="${course.title}">Course name</a>
+					</td>
+					<td th:text="${course.author}">Course Author</td>
+					<td>
+						<form class="inline" th:method="get" th:action="@{/course/{id}(id = ${course.id})}">
+							<button class="table-button" type="submit">Редактировать</button>
+						</form>
+
+						<form th:method="delete"  sec:authorize="hasRole('ADMIN')" th:action="@{/course/{id}(id = ${course.id})}">
+							<button class="table-button" type="submit">Удалить</button>
+						</form>
+					</td>
+				</tr>
+				</tbody>
+
+				<tr th:if="${courses.empty}">
+					<td colspan="4">Нет данных</td>
+				</tr>
+			</table>
+		</div>
+</body>
+</html>

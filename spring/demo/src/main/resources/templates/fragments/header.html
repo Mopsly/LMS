@@ -13,7 +13,7 @@
 
     <span class="header-item" sec:authorize="hasRole('ADMIN')"
           th:classappend="${activePage =='admin'} ? active">
-		<a th:href="@{/admin/users}">Администрирование</a>
+		<a th:href="@{/admin}">Администрирование</a>
 	</span>
 
     <div class="float-right">
