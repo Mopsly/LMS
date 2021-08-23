@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <title>Create module</title>
+</head>
+<body>
+
+<header th:replace="fragments/header :: header"></header>
+
+<form th:object="${module}" th:method="post" th:action="@{/module}">
+    <input type="hidden" th:field="*{id}">
+
+    <div class="block">
+        <h1>Создать модуль</h1>
+    </div>
+
+    <div class="block">
+        <label for="title">Название</label>
+        <input type="text" id="title" name="title" th:field="*{title}">
+        <small class="validation-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">
+            Название должно быть заполнено
+        </small>
+
+        <label for="description">Описание</label>
+        <textarea id="description" name="description" rows="33" cols="33" th:field="*{description}"></textarea>
+
+        <label for="courseId">Курс</label>
+        <select id="courseId" name="courseId">
+            <option th:each="course :${courses}"
+                    th:value="${course.id}"
+                    th:text="${course.title}">Название курса
+            </option>
+        </select>
+
+        <button class="submit-button" name ="submit" value="submit" type="submit">Сохранить</button>
+    </div>
+</form>
+</body>
+</html>
