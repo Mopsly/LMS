@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,16 +27,16 @@
 
         <label for="description">Описание</label>
         <textarea id="description" name="description" rows="33" cols="33" th:field="*{description}"></textarea>
-
-        <label for="courseId">Курс</label>
-        <select id="courseId" name="courseId">
-            <option th:each="course :${courses}"
+        <div sec:authorize="hasRole('ADMIN')">
+            <label for="courseId">Курс</label>
+            <select id="courseId" name="courseId">
+                <option th:each="course :${courses}"
                     th:value="${course.id}"
                     th:text="${course.title}">Название курса
-            </option>
-        </select>
-
-        <button class="submit-button" name ="submit" value="submit" type="submit">Сохранить</button>
+                </option>
+            </select>
+            <button class="submit-button" name ="submit" value="submit" type="submit">Сохранить</button>
+        </div>
     </div>
 </form>
 </body>

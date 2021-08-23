@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -12,7 +15,9 @@ import lombok.Setter;
 public class ModuleDto {
 
     private Long id;
+    @NotBlank(message = "необходимо указать имя модуля")
     private String title;
     private String description;
+    @NotNull(message = "Необходимо выбрать курс")
     private Long courseId;
 }
