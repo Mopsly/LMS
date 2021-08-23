@@ -2,25 +2,20 @@ package com.example.demo.controller;
 
 import com.example.demo.domain.Role;
 import com.example.demo.dto.UserDto;
-import com.example.demo.exception.InternalServerError;
-import com.example.demo.exception.LoginFailedException;
 import com.example.demo.service.AvatarStorageService;
 import com.example.demo.service.RoleService;
 import com.example.demo.service.StatisticsCounter;
 import com.example.demo.service.UserService;
 
 import java.util.List;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping({"/user"})
@@ -46,7 +41,7 @@ public class UserController {
     @GetMapping({"{id}"})
     public String userForm(Model model, HttpServletRequest request, @PathVariable Long id) {
         this.statisticsCounter.countHandlerCall("/user");
-        model.addAttribute("user", this.userService.findById(id));
+        model.addAttribute("user", this.userService.findDtoById(id));
         return "user_form";
     }
 

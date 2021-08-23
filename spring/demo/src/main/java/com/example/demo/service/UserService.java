@@ -44,8 +44,12 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public UserDto findById(long id) {
+    public UserDto findDtoById(long id) {
         return userMapper.mapUserToDto((User) this.userRepository.findById(id).orElseThrow(NotFoundException::new));
+    }
+
+    public User findById(Long id){
+        return userRepository.getById(id);
     }
 
     public List<User> unassignedUsers(Long courseId) {
@@ -67,11 +71,20 @@ public class UserService {
         // если приходит запрос на сохранение пользователя без списка ролей,
         // то ищем его первоначальный список ролей и сохраняем его
         if (userDto.getRoles()==null){
-            Set<Role> roles = findById(userDto.getId()).getRoles();
+            Set<Role> roles = findDtoById(userDto.getId()).getRoles();
             userDto.setRoles(roles);
         }
         this.userRepository.save(new User(userDto.getId(), userDto.getUsername(), userDto.getEmail(), userDto.getNickname(),
                 this.encoder.encode(userDto.getPassword()), userDto.getCourses(), userDto.getRoles()));
+    }
+    public void update(UserDto userDto) {
+        User user = userRepository.getById(userDto.getId());
+        user.setUsername(userDto.getUsername());
+        user.setPassword(this.encoder.encode(userDto.getPassword()));
+        user.setEmail(userDto.getEmail());
+        user.setNickname(userDto.getNickname());
+        userRepository.save(user);
+
     }
 
     public UserDto getUserByUsername(String username) {

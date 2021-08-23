@@ -10,12 +10,19 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
+import static java.lang.annotation.ElementType.TYPE;
+
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
+@Target({TYPE, ANNOTATION_TYPE})
 @Constraint(validatedBy = UniqueEmailValidator.class)
 public @interface UniqueEmail {
 
     String message() default "Введенный адрес почты уже занят";
+
+    String email();
+
+    String id();
 
     Class<?>[] groups() default {};
 

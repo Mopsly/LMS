@@ -45,9 +45,7 @@ public class AvatarStorageService {
         String filename;
         if (opt.isEmpty()) {
             filename = UUID.randomUUID().toString();
-            User user = userRepository.findUserByUsername(username)
-                    .orElseThrow(IllegalArgumentException::new);
-            avatarImage = new AvatarImage(null, contentType, filename, user);
+            avatarImage = new AvatarImage(null, contentType, filename, userRepository.getUserByUsername(username));
         } else {
             avatarImage = opt.get();
             filename = avatarImage.getFilename();

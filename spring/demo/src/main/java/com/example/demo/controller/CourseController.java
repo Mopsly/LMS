@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.Constants;
 import com.example.demo.domain.Course;
+import com.example.demo.domain.User;
 import com.example.demo.dto.UserDto;
 import com.example.demo.exception.InternalServerError;
 import com.example.demo.exception.MediaNotFoundException;
@@ -20,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -56,7 +56,6 @@ public class CourseController {
         if (principal != null) {
             logger.info("Request from user '{}'", principal.getName());
         }
-
         model.addAttribute("courses", this.courseService.courseByTitlePrefix(titlePrefix == null ? "" : titlePrefix));
         return "course_table";
     }
@@ -114,18 +113,18 @@ public class CourseController {
 
     @PostMapping({"/{courseId}/assign"})
     public String assignUserForm(@PathVariable("courseId") Long courseId, @RequestParam("userId") Long id) {
-        UserDto userDto = this.userService.findById(id);
+        User user = this.userService.findById(id);
         Course course = this.courseService.courseById(courseId);
-        this.courseService.setUserOnCourse(this.userMapper.mapDtoToUser(userDto), course);
+        this.courseService.setUserOnCourse(user, course);
         return "redirect:/course/{courseId}";
     }
 
     @PostMapping({"/{courseId}/remove/{userId}"})
-    @PreAuthorize("@AccessSecurityBean.hasAdminRights(#request)")
+//    @PreAuthorize("@AccessSecurityBean.hasAdminRights(#request)")
     public String removeUserForm(@PathVariable("courseId") Long courseId, @PathVariable("userId") Long id, HttpServletRequest request) {
-        UserDto userDto = this.userService.findById(id);
+        User user = this.userService.findById(id);
         Course course = this.courseService.courseById(courseId);
-        this.courseService.removeUserFromCourse(this.userMapper.mapDtoToUser(userDto), course);
+        this.courseService.removeUserFromCourse(user, course);
         return "redirect:/course/{courseId}";
     }
 
