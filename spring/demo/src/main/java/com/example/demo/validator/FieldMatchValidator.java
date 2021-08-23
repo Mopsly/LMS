@@ -5,6 +5,7 @@ import org.apache.commons.beanutils.BeanUtils;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import java.lang.reflect.InvocationTargetException;
 
 public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Object>
 {
@@ -21,16 +22,16 @@ public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Obje
     @Override
     public boolean isValid(final Object value, final ConstraintValidatorContext context)
     {
-        try
-        {
+
+
+        try {
             final Object firstObj = BeanUtils.getProperty(value, firstFieldName);
             final Object secondObj = BeanUtils.getProperty(value, secondFieldName);
-
             return firstObj == null && secondObj == null || firstObj != null && firstObj.equals(secondObj);
-        }
-        catch (final Exception ignore)
-        {
-            // ignore
+        } catch (IllegalAccessException
+                | InvocationTargetException
+                | NoSuchMethodException e) {
+            //ignore
         }
         return true;
     }

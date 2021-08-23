@@ -74,9 +74,6 @@ public class UserService {
                 this.encoder.encode(userDto.getPassword()), userDto.getCourses(), userDto.getRoles()));
     }
 
-    public UserDto getUserByUsername(String username) {
-        return this.userMapper.mapUserToDto(userRepository.getUserByUsername(username));
-    }
     public UserDto findUserByUsername(String username)
     {
         return this.userMapper.mapUserToDto(userRepository.findUserByUsername(username).orElseThrow(NotFoundException::new));

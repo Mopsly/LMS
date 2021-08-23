@@ -9,8 +9,13 @@ import javax.validation.ConstraintValidatorContext;
 
 public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, String> {
 
+    private final UserRepository userRepository;
+
     @Autowired
-    private UserRepository userRepository;
+    public UniqueEmailValidator(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
 
     @Override
     public void initialize(UniqueEmail constraintAnnotation) {
@@ -18,6 +23,6 @@ public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, St
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {
-        return userRepository.getUserByEmail(value) == null;
+        return !userRepository.findUserByEmail(value).isPresent();
     }
 }

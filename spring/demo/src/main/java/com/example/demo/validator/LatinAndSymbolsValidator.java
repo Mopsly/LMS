@@ -15,8 +15,12 @@ public class LatinAndSymbolsValidator implements ConstraintValidator<LatinAndSym
     @Override
     public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {
         for (int i = 0; i<value.length(); i++){
-            if (!Character.UnicodeBlock.of(value.charAt(i)).equals(Character.UnicodeBlock.BASIC_LATIN)
-                    || Character.isDigit(value.charAt(i)))
+            char c = value.charAt(i);
+            Character.UnicodeBlock block = Character.UnicodeBlock.of(c);
+            Character.UnicodeBlock latinBlock = Character.UnicodeBlock.BASIC_LATIN;
+            //Если не латиница и не символ
+            //Или если цифра
+            if (!block.equals(latinBlock) || Character.isDigit(c))
                 return false;
         }
         return true;

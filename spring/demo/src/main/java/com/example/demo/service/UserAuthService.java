@@ -4,6 +4,8 @@ import com.example.demo.dao.UserRepository;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
+
+import com.example.demo.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
