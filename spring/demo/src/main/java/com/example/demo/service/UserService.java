@@ -91,4 +91,8 @@ public class UserService {
     {
         return this.userMapper.mapUserToDto(userRepository.findUserByUsername(username).orElseThrow(NotFoundException::new));
     }
+
+    public User findByUsername(String username) {
+        return userRepository.findUserByUsername(username).orElseThrow(NotFoundException::new);
+    }
 }
