@@ -54,4 +54,8 @@ public class CourseService {
         course.getUsers().remove(user);
         this.repository.save(course);
     }
+
+    public List<Course> findAll() {
+        return this.repository.findAll();
+    }
 }

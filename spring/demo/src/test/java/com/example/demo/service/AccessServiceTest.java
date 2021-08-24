@@ -16,25 +16,26 @@ import static org.junit.Assert.assertThrows;
 
 public class AccessServiceTest {
 
+    private final ModuleService moduleService = Mockito.mock(ModuleService.class);
+    private final UserService userService = Mockito.mock(UserService.class);
 
     HttpServletRequest requestMock;
     @BeforeEach
     public void setUp(){
         requestMock = Mockito.mock(HttpServletRequest.class);
-
     }
 
     @Test
     public void hasAdminRightsTest(){
         Mockito.when(requestMock.isUserInRole(Constants.ADMIN)).thenReturn(true);
-        AccessService service = new AccessService();
+        AccessService service = new AccessService(moduleService, userService);
         Assertions.assertThat(service.hasAdminRights(requestMock)).isTrue();
         }
 
     @Test
     public void hasNoAdminRightsTest(){
         Mockito.when(requestMock.isUserInRole(Constants.ADMIN)).thenReturn(false);
-        AccessService service = new AccessService();
+        AccessService service = new AccessService(moduleService, userService);
         assertThrows(AccessDeniedException.class, () -> service.hasAdminRights(requestMock));
     }
 }
