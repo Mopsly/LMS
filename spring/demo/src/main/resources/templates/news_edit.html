@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <title>Create news Record</title>
+</head>
+<body>
+
+<header th:replace="fragments/header :: header"></header>
+
+<form th:object="${record}" th:method="post" th:action="@{/news}">
+    <input type="hidden" th:field="*{id}">
+
+    <div class="block">
+        <h1>Создать/Редактировать</h1>
+    </div>
+
+    <div class="block">
+        <label for="title">Название</label>
+        <input type="text" id="title" name="title" th:field="*{title}">
+        <small class="validation-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">
+            Название должно быть заполнено
+        </small>
+        <label for="authorId">Автор</label>
+        <select id="authorId" th:name="authorId">
+            <option th:each="user :${users}"
+                    th:value="${user.id}"
+                    th:text="${user.username}"
+                    th:field="${record.authorId}">Автор
+            </option>
+        </select>
+        <label for="hashTag">Тэг</label>
+        <input type="text" id="hashTag" name="hashTag" th:field="*{tag}">
+        <small class="validation-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">
+            Тэг должен быть заполнен
+        </small>
+
+        <button class="submit-button" name="submit" value="submit" type="submit">Сохранить</button>
+    </div>
+</form>
+</body>
+</html>

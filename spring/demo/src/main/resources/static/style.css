@@ -206,3 +206,14 @@ a{
 .course-label {
 	width: 25%;
 }
+
+.news-card{
+	background-color: #F98F31;
+	border-radius: 15px;
+	margin: 10px;
+	padding:10px;
+}
+.credentials{
+	color: #1F2D45;
+	margin-top: 5px;
+}

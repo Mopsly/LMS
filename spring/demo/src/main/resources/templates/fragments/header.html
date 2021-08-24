@@ -16,6 +16,11 @@
 		<a th:href="@{/admin}">Администрирование</a>
 	</span>
 
+    <span class="header-item" sec:authorize="isAuthenticated()"
+          th:classappend="${activePage =='news'} ? active">
+		<a th:href="@{/news}">Новости</a>
+	</span>
+
     <div class="float-right">
         <a class="header-link" sec:authorize="!isAuthenticated()" th:href="@{/login}">
             Войти

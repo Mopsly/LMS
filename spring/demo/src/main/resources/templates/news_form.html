@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <title th:text="${record.title}">Record</title>
+</head>
+<body>
+
+<header th:replace="fragments/header :: header"></header>
+
+
+<div class="block">
+    <h1 th:text="${record.title}">Название</h1>
+</div>
+<div class="block">
+    <a class="table_link" sec:authorize="hasRole('ADMIN')"
+       th:href="@{/news/{id}/edit(id = ${record.id})}">Редактировать</a>
+    <div class="news-card">
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+            ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+            laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
+            voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
+            non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <div class="credentials">
+            <a th:href="@{/user/{id}(id = ${record.author.id})}">
+                <span th:text="${record.author.username}">Author</span>
+            </a>
+            <span th:text="${record.publicationDate}">Date</span>
+            <span th:text="${record.tag}">tag</span>
+        </div>
+    </div>
+        <form th:method="delete" sec:authorize="hasRole('ADMIN')" th:action="@{/news/{id}(id = ${record.id})}">
+            <button class="submit-button" type="submit">Удалить</button>
+        </form>
+</div>
+</body>
+</html>

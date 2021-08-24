@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <title>Изменение персональных данных</title>
+</head>
+<body>
+
+<header th:replace="fragments/header :: header"></header>
+
+<div class="block">
+    <h1>Новости</h1>
+</div>
+
+<div class="block">
+    <a class="table_link" sec:authorize="hasRole('ADMIN')"
+       th:href="@{/news/new}">Добавить новость</a>
+
+    <form th:object="${filter}" th:method="get" th:action="@{/news}">
+        <label for="authorId">Автор:</label>
+        <select id="authorId" th:name="authorId">
+            <option th:value="-1">Любой</option>
+            <option th:each="author :${authors}"
+                    th:value="${author.id}"
+                    th:text="${author.username}"
+                    th:field = "${filter.authorId}">Автор
+            </option>
+        </select>
+        <label for="hashTag">Тэг:</label>
+        <select id="hashTag" th:name="hashTag">
+            <option th:value="any">Любой</option>
+            <option th:each="tag :${tags}"
+                    th:value="${tag}"
+                    th:text="${tag}"
+                    th:field = "${filter.hashTag}">Тэг
+            </option>
+        </select>
+        <button class="submit-button" type="submit">
+            Выбрать
+        </button>
+    </form>
+    <div class="news-card" th:unless="${records.empty}" th:each="record : ${records}">
+
+        <a th:href="@{/news/{id}(id = ${record.id})}">
+            <h3 th:text="${record.title}">Title</h3>
+        </a>
+
+        <span th:text="${record.author.username}">Author</span>
+        <span th:text="${record.publicationDate}">Date</span>
+        <a th:href="@{/news/(hashTag=${record.tag})}">
+            <span th:text="${record.tag}">tag</span>
+        </a>
+    </div>
+    <div class="block" th:if="${records.empty}">
+        <h3>Новостей нет</h3>
+    </div>
+</div>
+
+</div>
+
+</body>
+</html>
