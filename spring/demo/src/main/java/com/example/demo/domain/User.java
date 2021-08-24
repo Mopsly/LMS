@@ -3,21 +3,25 @@ package com.example.demo.domain;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JoinColumn(name="id")
     private Long id;
 
     @Column
-    @NotBlank(message = "Имя пользователя должно быть заполнено")
     private String username;
 
     @Column
-    @NotBlank(message = "Пароль должен быть заполнен")
+    private String email;
+
+    @Column
+    private String nickname;
+
+    @Column
     private String password;
 
     @ManyToMany(mappedBy = "users")
@@ -29,6 +33,9 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
     private AvatarImage avatarImage;
 
+    @OneToOne(mappedBy = "user",cascade = CascadeType.REMOVE)
+    private Authorisation authorisation;
+
     public User() {
     }
 
@@ -37,10 +44,12 @@ public class User {
         this.courses = courses;
     }
 
-    public User(Long id, String username, String password, Set<Course> courses, Set<Role> roles) {
+    public User(Long id, String username, String email, String nickname, String password, Set<Course> courses, Set<Role> roles) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.email = email;
+        this.nickname = nickname;
         this.courses = courses;
         this.roles = roles;
     }
@@ -52,6 +61,32 @@ public class User {
         this.courses = courses;
         this.roles = roles;
         this.avatarImage = avatarImage;
+    }
+
+    public User(Long id, String username, String email, String nickname,
+                String password, Set<Course> courses, Set<Role> roles,
+                AvatarImage avatarImage) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.nickname = nickname;
+        this.password = password;
+        this.courses = courses;
+        this.roles = roles;
+        this.avatarImage = avatarImage;
+    }
+
+    public User(Long id, String username, String email, String nickname, String password, Set<Course> courses,
+                Set<Role> roles, AvatarImage avatarImage, Authorisation authorisation) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.nickname = nickname;
+        this.password = password;
+        this.courses = courses;
+        this.roles = roles;
+        this.avatarImage = avatarImage;
+        this.authorisation = authorisation;
     }
 
     public Long getId() {
@@ -118,5 +153,29 @@ public class User {
 
     public void setAvatarImage(AvatarImage avatarImage) {
         this.avatarImage = avatarImage;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public Authorisation getAuthorisation() {
+        return authorisation;
+    }
+
+    public void setAuthorisation(Authorisation authorisation) {
+        this.authorisation = authorisation;
     }
 }

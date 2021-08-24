@@ -27,7 +27,7 @@ public class UserAuthServiceTest {
         Mockito.when(userRepositoryMock.findUserByUsername("username"))
                 .thenReturn(java.util.Optional.of(new User(
                         1L,
-                        "username",
+                        "username","email","nickname",
                         "password", new HashSet<>(), Set.of(new Role(1L,"ROLE_USER",new HashSet<>())))));
         userAuthService =  new UserAuthService(userRepositoryMock);
     }

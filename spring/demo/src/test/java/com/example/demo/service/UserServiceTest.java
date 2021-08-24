@@ -25,8 +25,8 @@ import static org.mockito.Mockito.when;
 public class UserServiceTest {
 
     UserService userService;
-    List<User> users = List.of(new User(1L,"Вася","123",new HashSet<>(),new HashSet<>()),
-            new User(2L,"Петя","123",new HashSet<>(),new HashSet<>()));
+    List<User> users = List.of(new User(1L,"Вася","email","nickname","123",new HashSet<>(),new HashSet<>()),
+            new User(2L,"Петя","email","nickname","123",new HashSet<>(),new HashSet<>()));
 
     @BeforeEach
     public void setUp(){
@@ -40,12 +40,12 @@ public class UserServiceTest {
 
         when(userRepositoryMock.findAll()).thenReturn(users);
         when(userRepositoryMock.findById(1L))
-                .thenReturn(java.util.Optional.of(new User(1L, "Вася", "123", new HashSet<>(), new HashSet<>())));
+                .thenReturn(java.util.Optional.of(new User(1L, "Вася","email","nickname", "123", new HashSet<>(), new HashSet<>())));
 
         when(userRepositoryMock.findUserByUsername("Вася"))
-                .thenReturn(java.util.Optional.of(new User(1L, "Вася", "123", new HashSet<>(), new HashSet<>())));
+                .thenReturn(java.util.Optional.of(new User(1L, "Вася","email","nickname", "123", new HashSet<>(), new HashSet<>())));
         when(userRepositoryMock.findUsersNotAssignedToCourse(any(Long.class)))
-                .thenReturn(List.of(new User(1L, "Вася", "123", new HashSet<>(), new HashSet<>())));
+                .thenReturn(List.of(new User(1L, "Вася","email","nickname", "123", new HashSet<>(), new HashSet<>())));
 
         userService = new UserService(userRepositoryMock,passwordEncoderMock,userMapper,roleRepositoryMock,courseService);
     }

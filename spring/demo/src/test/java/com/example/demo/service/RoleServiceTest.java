@@ -37,7 +37,7 @@ public class RoleServiceTest {
 
     @Test
     public void setDefaultRoleTest(){
-        UserDto user = new UserDto(1L,"user","password",new HashSet<>(),new HashSet<>());
+        UserDto user = new UserDto(1L,"user","email","nickname","password","password",new HashSet<>(),new HashSet<>());
         assertThat(roleService.setDefaultRole(user).getRoles(),
                 hasItem(hasProperty("name",is("ROLE_USER"))));
     }

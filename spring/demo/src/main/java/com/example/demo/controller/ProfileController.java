@@ -29,22 +29,18 @@ public class ProfileController {
     }
 
     @GetMapping()
-    public String profileForm(Principal principal, Model model){
-        model.addAttribute("user",new UserDto());
+    public String profileForm(Principal principal, Model model) {
+        model.addAttribute("user", new UserDto());
         return "profile_form";
     }
 
     @PostMapping("/avatar")
     public String updateAvatarImage(Authentication auth,
-                                    @RequestParam("avatar") MultipartFile avatar){
+                                    @RequestParam("avatar") MultipartFile avatar) {
         logger.info("File name {}, file content type {}, file size {}",
-                avatar.getOriginalFilename(),avatar.getContentType(),avatar.getSize());
-        try {
-            avatarStorageService.save(auth.getName(), avatar.getContentType(), avatar.getInputStream());
-        } catch (Exception ex) {
-            logger.info("", ex);
-            throw new InternalServerError();
-        }
+                avatar.getOriginalFilename(), avatar.getContentType(), avatar.getSize());
+        avatarStorageService.save(auth.getName(), avatar);
+
         return "redirect:/profile";
     }
 
