@@ -24,9 +24,6 @@ public interface NewsRepository extends JpaRepository<NewsRecord, Long> {
     List<NewsRecord> findAllByTagAndAuthor(@Param("tag") String tag,
                                            @Param("authorId") Long authorId, Sort sort);
 
-    @Query("select distinct nr.author from NewsRecord nr")
-    List<User> findAllAuthors();
-
     @Query("select distinct nr.tag from NewsRecord nr")
     List<String> findAllTags();
 

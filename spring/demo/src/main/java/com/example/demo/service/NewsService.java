@@ -51,9 +51,6 @@ public class NewsService {
         return newsRepository.findAllByTagAndAuthor(tag,authorId,Sort.by(direction, "publicationDate"));
     }
 
-    public List<User> findAllAuthors(){
-        return newsRepository.findAllAuthors();
-    }
     public List<String> findAllTags(){
         return newsRepository.findAllTags();
     }
