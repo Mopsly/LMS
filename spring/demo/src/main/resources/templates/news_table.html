@@ -37,6 +37,11 @@
                     th:field = "${filter.hashTag}">Тэг
             </option>
         </select>
+        <label for="sortOrder">Сортировка:</label>
+        <select id="sortOrder" th:name="sortOrder">
+            <option th:value="desc" th:field = "${filter.sortOrder}">Сначала новые</option>
+            <option th:value="asc" th:field = "${filter.sortOrder}">Сначала старые</option>
+        </select>
         <button class="submit-button" type="submit">
             Выбрать
         </button>

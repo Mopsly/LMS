@@ -14,4 +14,6 @@ public class NewsFilter {
     private String hashTag;
 
     private Long authorId;
+
+    private String sortOrder;
 }

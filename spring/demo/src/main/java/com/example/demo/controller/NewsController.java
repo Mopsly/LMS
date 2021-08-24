@@ -5,8 +5,8 @@ import com.example.demo.domain.User;
 import com.example.demo.dto.NewsRecordDto;
 import com.example.demo.service.NewsService;
 import com.example.demo.service.UserService;
-import com.example.demo.utils.MapptingUtils.NewsRecordMapper;
 import com.example.demo.utils.MapptingUtils.UserMapper;
+import com.example.demo.utils.MapptingUtils.NewsRecordMapper;
 import com.example.demo.utils.filter.NewsFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,6 +26,7 @@ public class NewsController {
     private final NewsService newsService;
     private final UserService userService;
     private final UserMapper userMapper;
+
 
     @Autowired
     public NewsController(NewsService newsService, UserService userService, UserMapper userMapper) {
@@ -61,7 +62,7 @@ public class NewsController {
     @GetMapping
     @PreAuthorize("isAuthenticated()")
     public String recordsWithFilters(NewsFilter filter, Model model) {
-        List<NewsRecord> records = newsService.findNewsWithFilters(filter.getHashTag(), filter.getAuthorId());
+        List<NewsRecord> records = newsService.findNewsWithFilters(filter);
         model.addAttribute("records", records);
         model.addAttribute("authors", newsService.findAllAuthors());
         model.addAttribute("tags", newsService.findAllTags());
