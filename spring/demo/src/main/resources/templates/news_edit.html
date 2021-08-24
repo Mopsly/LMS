@@ -33,7 +33,7 @@
         </select>
         <label for="hashTag">Тэг</label>
         <input type="text" id="hashTag" name="hashTag" th:field="*{tag}">
-        <small class="validation-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">
+        <small class="validation-error" th:if="${#fields.hasErrors('title')}" th:errors="*{hashTag}">
             Тэг должен быть заполнен
         </small>
         <button class="submit-button" name="submit" value="submit" type="submit">Сохранить</button>

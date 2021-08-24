@@ -26,16 +26,12 @@ public class NewsRecord {
     private User author;
 
     @Column
-    @NotNull
-    @NotBlank
     private String title;
 
     @Column
     private Date publicationDate;
 
     @Column
-    @NotNull
-    @NotBlank
     private String tag;
 
     //private Content content;

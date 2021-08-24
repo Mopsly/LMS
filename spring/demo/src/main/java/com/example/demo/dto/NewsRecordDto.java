@@ -21,17 +21,17 @@ public class NewsRecordDto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @NotNull(message = "Автор должен быть указан")
     private Long authorId;
 
     @NotNull
-    @NotBlank
+    @NotBlank(message = "Название должно быть указано")
     private String title;
 
 
     private Date publicationDate;
 
     @NotNull
-    @NotBlank
+    @NotBlank(message = "Тэг должен быть указан")
     private String tag;
 }
