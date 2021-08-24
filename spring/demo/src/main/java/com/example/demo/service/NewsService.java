@@ -3,7 +3,6 @@ package com.example.demo.service;
 import com.example.demo.dao.NewsRepository;
 import com.example.demo.domain.NewsRecord;
 import com.example.demo.domain.User;
-import com.example.demo.dto.UserDto;
 import com.example.demo.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,14 +16,6 @@ public class NewsService {
     @Autowired
     public NewsService(NewsRepository newsRepository) {
         this.newsRepository = newsRepository;
-    }
-
-    public List<NewsRecord> findAllNews(){
-        return newsRepository.findAll();
-    }
-
-    public List<NewsRecord> findAllByTag(String tag){
-        return newsRepository.findAllByTag(tag);
     }
 
     public NewsRecord findRecordById(Long id){
@@ -48,11 +39,9 @@ public class NewsService {
     }
 
     public List<User> findAllAuthors(){
-        //TODO map to dto
         return newsRepository.findAllAuthors();
     }
     public List<String> findAllTags(){
-        //TODO map to dto
         return newsRepository.findAllTags();
     }
 

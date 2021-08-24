@@ -7,9 +7,15 @@ import com.example.demo.domain.User;
 import com.example.demo.dto.ModuleDto;
 import com.example.demo.dto.NewsRecordDto;
 
+import java.sql.Date;
+import java.util.Calendar;
+
 public class NewsRecordMapper {
 
     public static NewsRecord mapDtoToNewsRecord(NewsRecordDto dto, User user) {
+        if (dto.getPublicationDate() == null){
+            dto.setPublicationDate(new Date(Calendar.getInstance().getTime().getTime()));
+        }
         return new NewsRecord(dto.getId(), user, dto.getTitle(),dto.getPublicationDate(), dto.getTag());
     }
 

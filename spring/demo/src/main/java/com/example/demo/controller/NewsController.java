@@ -3,7 +3,6 @@ package com.example.demo.controller;
 import com.example.demo.domain.NewsRecord;
 import com.example.demo.domain.User;
 import com.example.demo.dto.NewsRecordDto;
-import com.example.demo.dto.UserDto;
 import com.example.demo.service.NewsService;
 import com.example.demo.service.UserService;
 import com.example.demo.utils.MapptingUtils.NewsRecordMapper;
@@ -14,13 +13,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.DataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.sql.Date;
-import java.util.Calendar;
 import java.util.List;
 
 @Controller
