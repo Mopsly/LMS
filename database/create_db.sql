@@ -47,7 +47,6 @@ CREATE TABLE "lesson"(
     "module_id" INTEGER NOT NULL,
     "title" CHAR(255) NOT NULL,
     "description" CHAR(255) NOT NULL,
-    "content_id" BIGINT NOT NULL,
     "create_date" DATE NOT NULL,
     "author_id" BIGINT NULL,
     "edit_date" DATE NULL,
@@ -77,6 +76,15 @@ CREATE TABLE "rating_course"(
 );
 ALTER TABLE
     "rating_course" ADD PRIMARY KEY("id");
+CREATE TABLE "content"(
+    "id" INTEGER NOT NULL,
+    "type" VARCHAR(255) CHECK
+        ("type" IN('')) NOT NULL,
+        "data" bytea NOT NULL,
+        "lesson_id" BIGINT NOT NULL
+);
+ALTER TABLE
+    "content" ADD PRIMARY KEY("id");
 ALTER TABLE
     "courses_users" ADD CONSTRAINT "courses_users_users_id_foreign" FOREIGN KEY("users_id") REFERENCES "user"("id");
 ALTER TABLE
@@ -105,3 +113,5 @@ ALTER TABLE
     "rating_users" ADD CONSTRAINT "rating_users_course_id_foreign" FOREIGN KEY("course_id") REFERENCES "course"("id");
 ALTER TABLE
     "rating_course" ADD CONSTRAINT "rating_course_course_id_foreign" FOREIGN KEY("course_id") REFERENCES "course"("id");
+ALTER TABLE
+    "content" ADD CONSTRAINT "content_lesson_id_foreign" FOREIGN KEY("lesson_id") REFERENCES "lesson"("id");
