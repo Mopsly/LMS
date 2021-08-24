@@ -13,8 +13,12 @@ import java.util.Optional;
 
 public class UniqueUsernameValidator implements ConstraintValidator<UniqueUsername, UserDto> {
 
+    private final UserRepository userRepository;
+
     @Autowired
-    private UserRepository userRepository;
+    public UniqueUsernameValidator(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     private String username;
     private String id;
@@ -26,6 +30,8 @@ public class UniqueUsernameValidator implements ConstraintValidator<UniqueUserna
     }
 
     @Override
+    public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {
+        return !userRepository.findUserByUsername(value).isPresent();
     public boolean isValid(UserDto value, ConstraintValidatorContext constraintValidatorContext) {
         try {
             final String usernameVal = BeanUtils.getProperty(value, username);

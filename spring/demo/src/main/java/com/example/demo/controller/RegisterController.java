@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 
 @Controller
 @RequestMapping({"/register"})
@@ -44,21 +45,15 @@ public class RegisterController {
             return "reg_form";
         } else {
             userService.save(roleService.setDefaultRole(user));
-            if (avatar != null){
-                try {
-                    avatarStorageService.save(user.getUsername(), avatar.getContentType(), avatar.getInputStream());
-                } catch (Exception ex) {
-                    throw new InternalServerError();
-                }
-            }
-            authorisationService.sendMessage(user.getEmail(),"Confirm your registration",
+            avatarStorageService.save(user.getUsername(), avatar);
+            authorisationService.sendMessage(user.getEmail(), "Confirm your registration",
                     authorisationService.messageToSend(user, authorisationService.generateCode(user)));
             return "reg_confirm";
         }
     }
 
     @GetMapping("/{code}/success")
-    public String registerSuccess(@PathVariable String code, HttpServletRequest request){
+    public String registerSuccess(@PathVariable String code, HttpServletRequest request) {
         UserDto user = authorisationService.findUserByCode(code);
         authorisationService.authoriseUser(user);
         return "reg_success";

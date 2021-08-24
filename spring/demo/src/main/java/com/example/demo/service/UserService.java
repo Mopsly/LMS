@@ -87,9 +87,6 @@ public class UserService {
 
     }
 
-    public UserDto getUserByUsername(String username) {
-        return this.userMapper.mapUserToDto(userRepository.getUserByUsername(username));
-    }
     public UserDto findUserByUsername(String username)
     {
         return this.userMapper.mapUserToDto(userRepository.findUserByUsername(username).orElseThrow(NotFoundException::new));

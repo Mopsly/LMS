@@ -8,11 +8,13 @@ import com.example.demo.annotations.UniqueEmail;
 import com.example.demo.annotations.UniqueUsername;
 import com.example.demo.domain.Course;
 import com.example.demo.domain.Role;
+import com.sun.istack.NotNull;
 import org.springframework.data.annotation.Transient;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.Objects;
 import java.util.Set;
 
 @FieldMatch(first = "password", second = "passwordConfirm", message = "Пароли должны совпадать")
@@ -23,15 +25,19 @@ import java.util.Set;
 public class UserDto {
     private Long id;
 
+    @NotNull
     @NotBlank(message = "Имя пользователя должно быть заполнено")
     @LatinAndSymbols(message = "Логин должен включать в себя латиницу и/или спецсимволы")
     private String username;
 
+    @NotNull
     @NotBlank(message = "Email должен быть указан")
     @Email(message = "Неверный формат  почты")
     private String email;
+
     private String nickname;
 
+    @NotNull
     @NotBlank(message = "Пароль должен быть заполнен")
     @Size(min = 8, message = "Пароль не должен состоять менее чем из 8 символов")
     @LatinAndSymbols(message = "Пароль должен включать в себя латиницу и/или спецсимволы")
@@ -41,6 +47,7 @@ public class UserDto {
     private String passwordConfirm;
 
     private Set<Course> courses;
+
     private Set<Role> roles;
 
     public UserDto() {
@@ -119,5 +126,39 @@ public class UserDto {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UserDto)) return false;
+        UserDto userDto = (UserDto) o;
+        return id.equals(userDto.id)
+                && username.equals(userDto.username)
+                && email.equals(userDto.email)
+                && Objects.equals(nickname, userDto.nickname)
+                && password.equals(userDto.password)
+                && passwordConfirm.equals(userDto.passwordConfirm)
+                && Objects.equals(courses, userDto.courses)
+                && Objects.equals(roles, userDto.roles);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username, email, nickname, password, passwordConfirm, courses, roles);
+    }
+
+    @Override
+    public String toString() {
+        return "UserDto{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", password='" + password + '\'' +
+                ", passwordConfirm='" + passwordConfirm + '\'' +
+                ", courses=" + courses +
+                ", roles=" + roles +
+                '}';
     }
 }

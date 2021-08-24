@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,7 +40,18 @@ public class AvatarStorageService {
         this.userRepository = userRepository;
     }
     @Transactional
-    public void save(String username, String contentType, InputStream is) {
+    public void save(String username, MultipartFile avatar) {
+        if (avatar == null || avatar.getOriginalFilename().length() == 0){
+            return;
+        }
+        String contentType = avatar.getContentType();
+        InputStream is = InputStream.nullInputStream();
+        try {
+            is = avatar.getInputStream();
+        } catch (IOException ex) {
+            logger.error("Can't read file {}", ex);
+            throw new IllegalStateException(ex);
+        }
         Optional<AvatarImage> opt = avatarImageRepository.findByUser_Username(username);
         AvatarImage avatarImage;
         String filename;
@@ -55,7 +67,7 @@ public class AvatarStorageService {
 
         try (OutputStream os = Files.newOutputStream(Path.of(path, filename), CREATE, WRITE, TRUNCATE_EXISTING)) {
             is.transferTo(os);
-        } catch (Exception ex) {
+        } catch (IOException ex) {
             logger.error("Can't write to file {}", filename, ex);
             throw new IllegalStateException(ex);
         }

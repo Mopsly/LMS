@@ -9,14 +9,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import java.util.Optional;
 
 public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, UserDto> {
+
+    private final UserRepository userRepository;
 
 
     private String email;
     private String id;
     @Autowired
-    private UserRepository userRepository;
+    public UniqueEmailValidator(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
 
     @Override
     public void initialize(UniqueEmail constraintAnnotation) {
@@ -25,20 +31,19 @@ public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, Us
     }
 
     @Override
-    public boolean isValid(UserDto value, ConstraintValidatorContext constraintValidatorContext) {
-        try {
-
+    public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {
+        try{
             final String emailVal = BeanUtils.getProperty(value, email);
             final String idStr = BeanUtils.getProperty(value, id);
             Long idVal = -1L;
             if (idStr != null){
                 idVal = Long.valueOf(idStr);
             }
-            User user = userRepository.getUserByEmail(emailVal);
-            return (user == null || user.getId().equals(idVal));
-        } catch (final Exception ignore) {
-            // ignore
+            Optional<User> user = userRepository.findUserByEmail(emailVal);
+            return !user.isPresent();
+        }catch (Exception e){
+
         }
-        return true;
+        return false;
     }
 }

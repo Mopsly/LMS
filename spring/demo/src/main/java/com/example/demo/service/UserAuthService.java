@@ -4,6 +4,8 @@ import com.example.demo.dao.UserRepository;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
+
+import com.example.demo.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,11 +26,8 @@ public class UserAuthService implements UserDetailsService {
     @Transactional
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User userFromDb = userRepository.findUserByUsername(username)
+        User userFromDb = userRepository.findAuthorisedUserByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        if (!userFromDb.getAuthorisation().isAuthrorised()){
-            throw new UsernameNotFoundException("User not found");
-        }
         return new org.springframework.security.core.userdetails.User(
                 userFromDb.getUsername(),
                 userFromDb.getPassword(),

@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.UserDto;
 import com.example.demo.exception.InternalServerError;
 import com.example.demo.exception.MediaNotFoundException;
+import com.example.demo.exception.NotFoundException;
 import com.example.demo.service.AvatarStorageService;
 import com.example.demo.service.UserService;
 import org.slf4j.Logger;
@@ -73,13 +74,8 @@ public class ProfileController {
                                     @RequestParam("avatar") MultipartFile avatar) {
         logger.info("File name {}, file content type {}, file size {}",
                 avatar.getOriginalFilename(), avatar.getContentType(), avatar.getSize());
-        try {
-           Long id = userService.getUserByUsername(auth.getName()).getId();
-            avatarStorageService.save(auth.getName(), avatar.getContentType(), avatar.getInputStream());
-        } catch (Exception ex) {
-            logger.info("", ex);
-            throw new InternalServerError();
-        }
+        avatarStorageService.save(auth.getName(), avatar);
+
         return "redirect:/profile";
     }
 
