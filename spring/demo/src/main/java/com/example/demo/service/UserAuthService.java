@@ -26,11 +26,8 @@ public class UserAuthService implements UserDetailsService {
     @Transactional
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User userFromDb = userRepository.findUserByUsername(username)
+        User userFromDb = userRepository.findAuthorisedUserByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        if (!userFromDb.getAuthorisation().isAuthrorised()){
-            throw new UsernameNotFoundException("User not found");
-        }
         return new org.springframework.security.core.userdetails.User(
                 userFromDb.getUsername(),
                 userFromDb.getPassword(),
