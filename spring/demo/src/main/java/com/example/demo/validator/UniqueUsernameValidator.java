@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 
 public class UniqueUsernameValidator implements ConstraintValidator<UniqueUsername, UserDto> {
@@ -30,20 +31,27 @@ public class UniqueUsernameValidator implements ConstraintValidator<UniqueUserna
     }
 
     @Override
-    public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {
-        return !userRepository.findUserByUsername(value).isPresent();
     public boolean isValid(UserDto value, ConstraintValidatorContext constraintValidatorContext) {
         try {
             final String usernameVal = BeanUtils.getProperty(value, username);
             final String idStr = BeanUtils.getProperty(value, id);
-            Long idVal = -1L;
+            long idVal = -1L;
+
             if (idStr != null){
-                idVal = Long.valueOf(idStr);
+                idVal = Long.parseLong(idStr);
             }
 
-            User user = userRepository.getUserByUsername(usernameVal);
-            return (user == null || user.getId().equals(idVal));
-        } catch (final Exception ignore) {
+            Optional<User> user = userRepository.findUserByUsername(usernameVal);
+            // Проверка нахождения пользователя в бд
+            if (user.isPresent()){
+                // Проверка что email принадлежит тому же пользователю
+                Long id = user.get().getId();
+                return id.equals(idVal);
+            }
+            return true;
+        } catch (IllegalAccessException
+                | InvocationTargetException
+                | NoSuchMethodException ignore) {
             // ignore
         }
         return true;

@@ -1,9 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.UserDto;
-import com.example.demo.exception.InternalServerError;
 import com.example.demo.exception.MediaNotFoundException;
-import com.example.demo.exception.NotFoundException;
 import com.example.demo.service.AvatarStorageService;
 import com.example.demo.service.UserService;
 import org.slf4j.Logger;
@@ -20,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.security.Principal;
 
 
 @Controller
@@ -36,9 +33,9 @@ public class ProfileController {
     }
 
     @GetMapping()
-    public String profileForm(Principal principal, Model model, Authentication auth) {
-        model.addAttribute("user", userService.getUserByUsername(auth.getName()));
-        model.addAttribute("courses", userService.getUserByUsername(auth.getName()).getCourses());
+    public String profileForm(Model model, Authentication auth) {
+        model.addAttribute("user", userService.findUserByUsername(auth.getName()));
+        model.addAttribute("courses", userService.findUserByUsername(auth.getName()).getCourses());
         return "profile_form";
     }
 
@@ -48,25 +45,19 @@ public class ProfileController {
                                 @RequestParam("avatar") MultipartFile avatar,
                                 Model model,
                                 HttpServletRequest req) {
-        model.addAttribute("courses",userService.findDtoById(user.getId()).getCourses());
+        model.addAttribute("courses", userService.findDtoById(user.getId()).getCourses());
         if (bindingResult.hasErrors()) {
             return "profile_form";
         } else {
-            if (avatar!=null && avatar.getOriginalFilename().length()>0) {
-                try {
-                    avatarStorageService.save(req.getRemoteUser(), avatar.getContentType(), avatar.getInputStream());
-                } catch (Exception ex) {
-                    throw new InternalServerError();
-                }
-                userService.update(user);
-            }
-            try {
-                req.logout();
-            } catch (ServletException e) {
-                e.printStackTrace();
-            }
-            return "profile_update_success";
+            avatarStorageService.save(req.getRemoteUser(), avatar);
+            userService.update(user);
         }
+        try {
+            req.logout();
+        } catch (ServletException e) {
+            e.printStackTrace();
+        }
+        return "profile_update_success";
     }
 
     @PostMapping("/avatar")
@@ -75,7 +66,6 @@ public class ProfileController {
         logger.info("File name {}, file content type {}, file size {}",
                 avatar.getOriginalFilename(), avatar.getContentType(), avatar.getSize());
         avatarStorageService.save(auth.getName(), avatar);
-
         return "redirect:/profile";
     }
 

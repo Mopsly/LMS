@@ -4,6 +4,7 @@ import com.example.demo.dao.AvatarImageRepository;
 import com.example.demo.dao.UserRepository;
 import com.example.demo.domain.AvatarImage;
 import com.example.demo.domain.User;
+import com.example.demo.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +58,8 @@ public class AvatarStorageService {
         String filename;
         if (opt.isEmpty()) {
             filename = UUID.randomUUID().toString();
-            avatarImage = new AvatarImage(null, contentType, filename, userRepository.getUserByUsername(username));
+            avatarImage = new AvatarImage(null, contentType, filename,
+                    userRepository.findUserByUsername(username).orElseThrow(NotFoundException::new));
         } else {
             avatarImage = opt.get();
             filename = avatarImage.getFilename();
