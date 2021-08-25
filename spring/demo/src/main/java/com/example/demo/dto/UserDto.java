@@ -17,20 +17,22 @@ import javax.validation.constraints.Size;
 import java.util.Objects;
 import java.util.Set;
 
-@FieldMatch(first = "password", second = "passwordConfirm", message = "The password fields must match")
+@FieldMatch(first = "password", second = "passwordConfirm", message = "Пароли должны совпадать")
+@UniqueEmail(email = "email", id = "id",
+        message = "Данный email уже зарегистрирован. Перейдите в форму авторизации и нажмите на кнопку восстановления пароля")
+@UniqueUsername(username = "username", id = "id",
+        message = "Данное имя пользователя уже занято")
 public class UserDto {
     private Long id;
 
     @NotNull
     @NotBlank(message = "Имя пользователя должно быть заполнено")
-    @UniqueUsername
     @LatinAndSymbols(message = "Логин должен включать в себя латиницу и/или спецсимволы")
     private String username;
 
     @NotNull
     @NotBlank(message = "Email должен быть указан")
     @Email(message = "Неверный формат  почты")
-    @UniqueEmail(message = "Данный email уже зарегистрирован. Перейдите в форму авторизации и нажмите на кнопку восстановления пароля")
     private String email;
 
     private String nickname;

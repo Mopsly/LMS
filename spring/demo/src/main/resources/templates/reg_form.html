@@ -18,6 +18,9 @@
 
 
     <div class="block">
+        <div th:if="${#fields.hasErrors('global')}">
+            <small class="hint" th:each="err : ${#fields.errors('global')}" th:text="${err}"/>
+        </div>
         <input type="hidden" th:field="*{id}">
         <label for="user-name">Имя пользователя:</label>
         <input type="text" name="user-name" id = "user-name" th:field="*{username}" >
