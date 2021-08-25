@@ -9,7 +9,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "users")
-public class User extends UserDto {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JoinColumn(name="id")
