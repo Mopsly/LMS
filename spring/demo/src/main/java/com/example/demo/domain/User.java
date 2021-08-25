@@ -1,12 +1,15 @@
 package com.example.demo.domain;
 
+import com.example.demo.dto.UserDto;
+
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.*;
 
+
 @Entity
 @Table(name = "users")
-public class User {
+public class User extends UserDto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JoinColumn(name="id")
@@ -17,6 +20,9 @@ public class User {
 
     @Column
     private String email;
+
+    @Column
+    private String phone;
 
     @Column
     private String nickname;
@@ -44,7 +50,7 @@ public class User {
         this.courses = courses;
     }
 
-    public User(Long id, String username, String email, String nickname, String password, Set<Course> courses, Set<Role> roles) {
+    public User(Long id, String username, String email, String nickname, String password, Set<Course> courses, Set<Role> roles, String phone) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -52,6 +58,7 @@ public class User {
         this.nickname = nickname;
         this.courses = courses;
         this.roles = roles;
+        this.phone = phone;
     }
 
     public User(Long id, String username, String password, Set<Course> courses, Set<Role> roles, AvatarImage avatarImage) {
@@ -65,7 +72,7 @@ public class User {
 
     public User(Long id, String username, String email, String nickname,
                 String password, Set<Course> courses, Set<Role> roles,
-                AvatarImage avatarImage) {
+                AvatarImage avatarImage, String phone) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -74,10 +81,11 @@ public class User {
         this.courses = courses;
         this.roles = roles;
         this.avatarImage = avatarImage;
+        this.phone = phone;
     }
 
     public User(Long id, String username, String email, String nickname, String password, Set<Course> courses,
-                Set<Role> roles, AvatarImage avatarImage, Authorisation authorisation) {
+                Set<Role> roles, AvatarImage avatarImage, Authorisation authorisation, String phone) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -87,7 +95,9 @@ public class User {
         this.roles = roles;
         this.avatarImage = avatarImage;
         this.authorisation = authorisation;
+        this.phone = phone;
     }
+
 
     public Long getId() {
         return this.id;
@@ -163,6 +173,14 @@ public class User {
         this.email = email;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     public String getNickname() {
         return nickname;
     }
@@ -178,4 +196,5 @@ public class User {
     public void setAuthorisation(Authorisation authorisation) {
         this.authorisation = authorisation;
     }
+
 }

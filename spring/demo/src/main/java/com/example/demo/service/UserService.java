@@ -34,18 +34,23 @@ public class UserService {
 
     public List<UserDto> findAll() {
         return this.userRepository.findAll().stream().map(
-                (usr) -> new UserDto(usr.getId(),
-                        usr.getUsername(),
-                        usr.getEmail(),
-                        usr.getNickname(),
-                        "","",
-                        usr.getCourses(),
-                        usr.getRoles()))
+                        (usr) -> new UserDto(usr.getId(),
+                                usr.getUsername(),
+                                usr.getEmail(),
+                                usr.getNickname(),
+                                "","",
+                                usr.getCourses(),
+                                usr.getRoles(),
+                                usr.getPhone()))
                 .collect(Collectors.toList());
     }
 
-    public UserDto findById(long id) {
+    public UserDto findDtoById(long id) {
         return userMapper.mapUserToDto((User) this.userRepository.findById(id).orElseThrow(NotFoundException::new));
+    }
+
+    public User findById(Long id){
+        return userRepository.getById(id);
     }
 
     public List<User> unassignedUsers(Long courseId) {
@@ -67,11 +72,11 @@ public class UserService {
         // если приходит запрос на сохранение пользователя без списка ролей,
         // то ищем его первоначальный список ролей и сохраняем его
         if (userDto.getRoles()==null){
-            Set<Role> roles = findById(userDto.getId()).getRoles();
+            Set<Role> roles = findDtoById(userDto.getId()).getRoles();
             userDto.setRoles(roles);
         }
         this.userRepository.save(new User(userDto.getId(), userDto.getUsername(), userDto.getEmail(), userDto.getNickname(),
-                this.encoder.encode(userDto.getPassword()), userDto.getCourses(), userDto.getRoles()));
+                this.encoder.encode(userDto.getPassword()), userDto.getCourses(), userDto.getRoles(), userDto.getPhone()));
     }
 
     public UserDto findUserByUsername(String username)
@@ -82,4 +87,5 @@ public class UserService {
     public User findByUsername(String username) {
         return userRepository.findUserByUsername(username).orElseThrow(NotFoundException::new);
     }
+
 }

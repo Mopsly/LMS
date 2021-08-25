@@ -28,7 +28,7 @@ public class UserAuthServiceTest {
                 .thenReturn(java.util.Optional.of(new User(
                         1L,
                         "username","email","nickname",
-                        "password", new HashSet<>(), Set.of(new Role(1L,"ROLE_USER",new HashSet<>())))));
+                        "password", new HashSet<>(), Set.of(new Role(1L,"ROLE_USER",new HashSet<>())), "88005553535")));
         userAuthService =  new UserAuthService(userRepositoryMock);
     }
 

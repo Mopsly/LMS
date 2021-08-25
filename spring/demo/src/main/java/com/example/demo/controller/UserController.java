@@ -46,7 +46,7 @@ public class UserController {
     @GetMapping({"{id}"})
     public String userForm(Model model, HttpServletRequest request, @PathVariable Long id) {
         this.statisticsCounter.countHandlerCall("/user");
-        model.addAttribute("user", this.userService.findById(id));
+        model.addAttribute("user", this.userService.findDtoById(id));
         return "user_form";
     }
 
@@ -60,6 +60,14 @@ public class UserController {
         }
     }
 
+    @GetMapping({"/new"})
+    @PreAuthorize("@AccessSecurityBean.hasAdminRights(#request)")
+    public String newUserForm(Model model,
+                              HttpServletRequest request) {
+        model.addAttribute("user", new UserDto());
+        return "user_form";
+    }
+
     @DeleteMapping({"/{id}"})
     @PreAuthorize("@AccessSecurityBean.hasAdminRights(#request)")
     public String deleteUser(HttpServletRequest request, @PathVariable("id") Long id) {
@@ -67,6 +75,7 @@ public class UserController {
         this.userService.deleteById(id);
         return "redirect:/admin/users";
     }
+
 
     @ModelAttribute("roles")
     public List<Role> rolesAttribute() {

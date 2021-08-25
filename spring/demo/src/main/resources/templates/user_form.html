@@ -22,6 +22,18 @@
         <input type="text" name="user-name" id=user-name th:field="*{username}">
         <small class="hint" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">
             Имя пользователя не должно быть пустым</small>
+        <label for="email">E-Mail:</label>
+        <input type="text" name="email" id = "email" th:field="*{email}" >
+        <small class="hint" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
+            Неверный формат адреса электронной почты </small>
+        <label for="phone">Номер телефона:</label>
+        <input type="text" name="email" id = "phone" th:field="*{phone}" >
+        <small class="hint" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">
+            Неверный формат номера телефона </small>
+        <label for="nick-name">Никнейм пользователя:</label>
+        <input type="text" name="nick-name" id = "nick-name" th:field="*{nickname}" >
+        <small class="hint" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}">
+            Никнейм пользователя не должно быть пустым</small>
         <label for="password">Пароль:</label>
         <input type="password" id="password" name="password" th:field="*{password}">
         <small class="hint" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
