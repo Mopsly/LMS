@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <title>Изменение персональных данных</title>
+</head>
+<body>
+
+<header th:replace="fragments/header :: header"></header>
+
+<div class="block">
+    <h1>Изменение персональных данных</h1>
+</div>
+
+<div class="block">
+    <span class=text>Изменения успешно сохранены</span>
+    <span class=text>Для продолжения - войдите в систему с новыми данными</span>
+    <a th:href="@{/login}">
+        <button class="center-button">Войти</button>
+    </a>
+    </form>
+</div>
+
+</body>
+</html>

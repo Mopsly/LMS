@@ -3,12 +3,7 @@ package com.example.demo.service;
 import com.example.demo.dao.CourseRepository;
 import com.example.demo.dao.RoleRepository;
 import com.example.demo.dao.UserRepository;
-import com.example.demo.domain.Course;
-import com.example.demo.domain.Role;
 import com.example.demo.domain.User;
-import com.example.demo.dto.UserDto;
-import com.example.demo.service.CourseService;
-import com.example.demo.service.UserService;
 import com.example.demo.utils.MapptingUtils.UserMapper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -59,8 +54,8 @@ public class UserServiceTest {
 
     @Test
     public void findByIdTest(){
-        Assertions.assertThat(userService.findById(1L)).extracting("username").isEqualTo("Вася");
-        Assertions.assertThat(userService.findById(1L)).extracting("password").isNotEqualTo("123");
+        Assertions.assertThat(userService.findDtoById(1L)).extracting("username").isEqualTo("Вася");
+        Assertions.assertThat(userService.findDtoById(1L)).extracting("password").isNotEqualTo("123");
     }
 
     @Test

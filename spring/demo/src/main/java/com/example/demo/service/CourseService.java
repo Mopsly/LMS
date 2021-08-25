@@ -3,6 +3,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dao.CourseRepository;
+import com.example.demo.dao.UserRepository;
 import com.example.demo.domain.Course;
 import com.example.demo.domain.User;
 import com.example.demo.exception.NotFoundException;

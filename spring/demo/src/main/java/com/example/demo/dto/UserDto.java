@@ -13,8 +13,11 @@ import javax.validation.constraints.*;
 import java.util.Objects;
 import java.util.Set;
 
-
-@FieldMatch(first = "password", second = "passwordConfirm", message = "The password fields must match")
+@FieldMatch(first = "password", second = "passwordConfirm", message = "Пароли должны совпадать")
+@UniqueEmail(email = "email", id = "id",
+        message = "Данный email уже зарегистрирован. Перейдите в форму авторизации и нажмите на кнопку восстановления пароля")
+@UniqueUsername(username = "username", id = "id",
+        message = "Данное имя пользователя уже занято")
 public class UserDto {
     private Long id;
 

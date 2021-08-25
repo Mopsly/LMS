@@ -78,6 +78,15 @@ public class UserService {
         this.userRepository.save(new User(userDto.getId(), userDto.getUsername(), userDto.getEmail(), userDto.getNickname(),
                 this.encoder.encode(userDto.getPassword()), userDto.getCourses(), userDto.getRoles(), userDto.getPhone()));
     }
+    public void update(UserDto userDto) {
+        User user = userRepository.getById(userDto.getId());
+        user.setUsername(userDto.getUsername());
+        user.setPassword(this.encoder.encode(userDto.getPassword()));
+        user.setEmail(userDto.getEmail());
+        user.setNickname(userDto.getNickname());
+        userRepository.save(user);
+
+    }
 
     public UserDto findUserByUsername(String username)
     {
