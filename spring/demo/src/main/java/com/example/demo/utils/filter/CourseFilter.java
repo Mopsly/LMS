@@ -21,15 +21,7 @@ public class CourseFilter {
 
     private String sortOrder;
 
-    public void init(){
-        if(category == null){
-            category = "any";
-        }
-        if(author == null){
-            author = "any";
-        }
-        if(sortOrder == null){
-            sortOrder = "title";
-        }
-    }
+public boolean hasEmptyFields(){
+    return (category == null || author == null || sortOrder ==null);
+}
 }

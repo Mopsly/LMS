@@ -101,15 +101,15 @@
 </div>
 
 <div th:if="${courses.totalPages > 0}" class="pagination">
-    <a th:if="${not courses.isFirst() and filter.sortOrder != null}"
+    <a th:if="${not courses.isFirst() and not filter.hasEmptyFields()}"
        th:href="@{/course(page=${courses.number}, author=${param.author},category=${param.category},sortOrder=${param.sortOrder})}">
         <
     </a>
-    <a th:if="${not courses.isFirst() and filter.sortOrder == null}" th:href="@{/course(page=${courses.number})}"><</a>
+    <a th:if="${not courses.isFirst() and filter.hasEmptyFields()}" th:href="@{/course(page=${courses.number})}"><</a>
 </div>
 <div th:if="${courses.totalPages > 0}" class="pagination"
      th:each="pageNumber : ${pageNumbers}">
-    <a      th:if ="${filter.sortOrder != null}"
+    <a      th:if ="${not filter.hasEmptyFields()}"
             th:href="@{/course(size=${courses.size}, page=${pageNumber},
     author=${param.author},category=${param.category},sortOrder=${param.sortOrder})}"
             th:text="${pageNumber}"
@@ -117,7 +117,7 @@
     >
 
     </a>
-    <a      th:if ="${filter.sortOrder == null}"
+    <a      th:if ="${filter.hasEmptyFields()}"
             th:href="@{/course(size=${courses.size}, page=${pageNumber})}"
             th:text="${pageNumber}"
             th:class="${pageNumber==courses.number + 1} ? active"
@@ -126,11 +126,11 @@
     </a>
 </div>
 <div th:if="${courses.totalPages > 0}" class="pagination">
-    <a th:if="${not courses.isLast() and filter.sortOrder != null}"
+    <a th:if="${not courses.isLast() and not filter.hasEmptyFields()}"
        th:href="@{/course(page=${courses.number}, author=${param.author},category=${param.category},sortOrder=${param.sortOrder})}">
         >
     </a>
-    <a th:if="${ not courses.isLast() and filter.sortOrder == null}"
+    <a th:if="${ not courses.isLast() and filter.hasEmptyFields()}"
        th:href="@{/course(page=${courses.number+2})}">></a>
 </div>
 </body>

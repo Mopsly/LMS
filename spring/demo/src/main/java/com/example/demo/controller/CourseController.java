@@ -64,7 +64,6 @@ public class CourseController {
         if (principal != null) {
             logger.info("Request from user '{}'", principal.getName());
         }
-//        filter.init();
         Page<Course> courses = courseService.coursesByFilters(filter,page-1,size);
         int totalPages = courses.getTotalPages();
         if (totalPages > 0) {
