@@ -68,7 +68,7 @@ public class LessonControllerTest {
             LessonDto lessonDto = new LessonDto(1L, 2L, "Title", "text");
 
             when(courseService.courseById(any(Long.class)))
-                    .thenReturn(new Course(1L,"Author","title"));
+                    .thenReturn(new Course(1L,"Author","title","category"));
             when(lessonService.lessonsWithoutText(any(Long.class))).thenReturn(new ArrayList<>());
 
             mockMvc.perform(post("/lesson")
@@ -81,7 +81,7 @@ public class LessonControllerTest {
 
     @Test
     void deleteLesson() throws Exception {
-        Lesson actualLesson = new Lesson(1L, "title", "description", new Course(1L, "Author", "Title"));
+        Lesson actualLesson = new Lesson(1L, "title", "description", new Course(1L, "Author", "Title","category"));
         when(lessonService.lessonById(any())).thenReturn(actualLesson);
         doNothing().when(lessonService).deleteLesson(any());
         mockMvc.perform(delete("/lesson/{id}", 1L)

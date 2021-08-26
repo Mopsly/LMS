@@ -6,10 +6,18 @@ import com.example.demo.dao.CourseRepository;
 import com.example.demo.dao.UserRepository;
 import com.example.demo.domain.Course;
 import com.example.demo.domain.User;
+import com.example.demo.dto.UserDto;
 import com.example.demo.exception.NotFoundException;
+
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.example.demo.utils.filter.CourseFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -23,6 +31,44 @@ public class CourseService {
 
     public Course courseById(Long id) {
         return repository.findById(id).orElseThrow(NotFoundException::new);
+    }
+
+    public Page<Course> courseByTitlePrefix(String prefix, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("title").ascending());
+        return this.repository.findByTitleLike(prefix + "%", pageable);
+    }
+
+    public Page<Course> coursesByFilters(CourseFilter filter, int page, int size) {
+        String sortOrder = filter.getSortOrder() == null ? "title" : filter.getSortOrder();
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortOrder).ascending());
+        if (filter.getCategory() == null) {
+            filter.setCategory("any");
+        }
+        if (filter.getAuthor() == null) {
+            filter.setAuthor("any");
+        }
+        if (!filter.getCategory().equals("any") && !filter.getAuthor().equals("any")) {
+            //            (by author and category)
+            return repository.findByTitleLikeAndAuthorAndCategory(
+                    (filter.getTitlePrefix() == null ? "" : filter.getTitlePrefix()) + "%",
+                    filter.getAuthor(),
+                    filter.getCategory(), pageable);
+
+        }
+        if (filter.getCategory().equals("any") && !filter.getAuthor().equals("any")) {
+//      (by author)
+            return repository.findByTitleLikeAndAuthor(
+                    (filter.getTitlePrefix() == null ? "" : filter.getTitlePrefix()) + "%",
+                    filter.getAuthor(), pageable);
+        }
+        if (!filter.getCategory().equals("any") && filter.getAuthor().equals("any")) {
+//      (by category)
+            return repository.findByTitleLikeAndCategory(
+                    (filter.getTitlePrefix() == null ? "" : filter.getTitlePrefix()) + "%",
+                    filter.getCategory(), pageable);
+        }
+        //просто по названию
+        return repository.findByTitleLike((filter.getTitlePrefix() == null ? "" : filter.getTitlePrefix()) + "%", pageable);
     }
 
     public List<Course> courseByTitlePrefix(String prefix) {
@@ -58,5 +104,13 @@ public class CourseService {
 
     public List<Course> findAll() {
         return this.repository.findAll();
+    }
+
+    public List<String> findAllCategories() {
+        return repository.findAllCategories();
+    }
+
+    public List<String> findAllAuthors() {
+        return repository.findAllAuthors();
     }
 }

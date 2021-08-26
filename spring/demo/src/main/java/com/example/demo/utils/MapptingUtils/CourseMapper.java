@@ -8,10 +8,10 @@ public class CourseMapper {
     }
 
     public static Course mapDtoToCourse(CourseDto courseDto) {
-        return new Course(courseDto.getId(), courseDto.getAuthor(), courseDto.getTitle());
+        return new Course(courseDto.getId(), courseDto.getAuthor(), courseDto.getTitle(),courseDto.getCategory());
     }
 
     public static CourseDto mapCourseToDto(Course course) {
-        return new CourseDto(course.getId(), course.getTitle(),course.getAuthor());
+        return new CourseDto(course.getId(), course.getTitle(),course.getAuthor(), course.getCategory());
     }
 }

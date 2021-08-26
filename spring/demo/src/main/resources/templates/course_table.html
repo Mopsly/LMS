@@ -1,61 +1,137 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-	  			xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" th:href="@{/style.css}">
-	<title>Courses</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <title>Courses</title>
 </head>
 
 <body>
-	<header th:replace="fragments/header :: header"></header>
-	<div class="block">
-		<h1>Курсы</h1>
-	</div>
-	<div class="block">
-		<form>
-			<label for="titlePrefix">Поиск по названию:</label>
-			<input type="text" id="titlePrefix" name="titlePrefix" th:value="${param.titlePrefix}">
-			<button class="submit-button">Найти</button>
-		</form>
-	</div>
+<header th:replace="fragments/header :: header"></header>
+<div class="block">
+    <h1>Курсы</h1>
+</div>
+<div class="block">
+    <form>
+        <label for="titlePrefix">Поиск по названию:</label>
+        <input type="text" id="titlePrefix" name="titlePrefix" th:value="${param.titlePrefix}">
+        <button class="submit-button">Найти</button>
+    </form>
+</div>
+<div class="block">
+    <form th:object="${filter}" th:method="get" th:action="@{/course}">
+        <label for="author">Автор:</label>
+        <select id="author" th:name="author">
+            <option th:value="any">Любой</option>
+            <option th:each="author :${authors}"
+                    th:if="${author != null}"
+                    th:value="${author}"
+                    th:text="${author}"
+                    th:selected="${author == filter.author}"
+                    th:field="${filter.author}">Автор
+            </option>
+        </select>
+        <label for="category">Категория:</label>
+        <select id="category" th:name="category">
+            <option th:value="any">Любой</option>
+            <option th:each="category :${categories}"
+                    th:if="${category != null}"
+                    th:value="${category}"
+                    th:text="${category}"
+                    th:selected="${category == filter.category}"
+                    th:field="${filter.category}">Тэг
+            </option>
+        </select>
+        <label for="sortOrder">Сортировка:</label>
+        <select id="sortOrder" th:name="sortOrder">
+            <option th:value="title" th:field="${filter.sortOrder}" th:selected="${filter.sortOrder == title}">
+                По названию
+            </option>
+            <option th:value="author" th:field="${filter.sortOrder}" th:selected="${filter.sortOrder == author}">
+                По автору
+            </option>
+            <option th:value="category" th:field="${filter.sortOrder}" th:selected="${filter.sortOrder == category}">
+                По категории
+            </option>
+        </select>
+        <button class="submit-button" type="submit">
+            Выбрать
+        </button>
+    </form>
+</div>
+<div class="block">
+    <a class="table_link" sec:authorize="hasRole('ADMIN')" th:href="@{/course/new}">Добавить курс</a>
+    <table>
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Название</th>
+            <th>Автор</th>
+            <th>Категория</th>
+            <th>Назначить/удалить</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:unless="${courses.empty}" th:each="course : ${courses}">
+            <td th:text="${course.id}">1</td>
+            <td>
+                <a th:text="${course.title}" th:href="@{/course/{id}(id = ${course.id})}">Course name</a>
+            </td>
+            <td th:text="${course.author}">Course Author</td>
+            <td th:text="${course.category}">Course Category</td>
+            <td>
+                <form class="inline" th:method="get" th:action="@{/course/{id}/assign(id = ${course.id})}">
+                    <button class="table-button" type="submit">Назначить</button>
+                </form>
 
+                <form th:method="delete" sec:authorize="hasRole('ADMIN')"
+                      th:action="@{/course/{id}(id = ${course.id})}">
+                    <button class="table-button" type="submit">Удалить</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
 
-		<div class="block">
-			<a class="table_link" sec:authorize="hasRole('ADMIN')" th:href="@{/course/new}">Добавить курс</a>
-			<table>
-				<thead>
-					<tr>
-						<th>Id</th>
-						<th>Название</th>
-						<th>Автор</th>
-						<th>Назначить/удалить</th>
-					</tr>
-				</thead>
-				<tbody>
-				<tr th:unless="${courses.empty}" th:each ="course : ${courses}">
-					<td th:text="${course.id}">1</td>
-					<td>
-						<a th:text="${course.title}" th:href="@{/course/{id}(id = ${course.id})}">Course name</a>
-					</td>
-					<td th:text="${course.author}">Course Author</td>
-					<td>
-						<form class="inline" th:method="get" th:action="@{/course/{id}/assign(id = ${course.id})}">
-							<button class="table-button" type="submit">Назначить</button>
-						</form>
+        <tr th:if="${courses.empty}">
+            <td colspan="5">Нет данных</td>
+        </tr>
+    </table>
+</div>
 
-						<form th:method="delete"  sec:authorize="hasRole('ADMIN')" th:action="@{/course/{id}(id = ${course.id})}">
-							<button class="table-button" type="submit">Удалить</button>
-						</form>
-					</td>
-				</tr>
-				</tbody>
+<div th:if="${courses.totalPages > 0}" class="pagination">
+    <a th:if="${not courses.isFirst() and filter.sortOrder != null}"
+       th:href="@{/course(page=${courses.number}, author=${param.author},category=${param.category},sortOrder=${param.sortOrder})}">
+        <
+    </a>
+    <a th:if="${not courses.isFirst() and filter.sortOrder == null}" th:href="@{/course(page=${courses.number})}"><</a>
+</div>
+<div th:if="${courses.totalPages > 0}" class="pagination"
+     th:each="pageNumber : ${pageNumbers}">
+    <a      th:if ="${filter.sortOrder != null}"
+            th:href="@{/course(size=${courses.size}, page=${pageNumber},
+    author=${param.author},category=${param.category},sortOrder=${param.sortOrder})}"
+            th:text="${pageNumber}"
+            th:class="${pageNumber==courses.number + 1} ? active"
+    >
 
-				<tr th:if="${courses.empty}">
-					<td colspan="4">Нет данных</td>
-				</tr>
-			</table>
-		</div>		
+    </a>
+    <a      th:if ="${filter.sortOrder == null}"
+            th:href="@{/course(size=${courses.size}, page=${pageNumber})}"
+            th:text="${pageNumber}"
+            th:class="${pageNumber==courses.number + 1} ? active"
+    >
+
+    </a>
+</div>
+<div th:if="${courses.totalPages > 0}" class="pagination">
+    <a th:if="${not courses.isLast() and filter.sortOrder != null}"
+       th:href="@{/course(page=${courses.number}, author=${param.author},category=${param.category},sortOrder=${param.sortOrder})}">
+        >
+    </a>
+    <a th:if="${ not courses.isLast() and filter.sortOrder == null}"
+       th:href="@{/course(page=${courses.number+2})}">></a>
+</div>
 </body>
 </html>

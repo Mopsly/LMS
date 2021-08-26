@@ -12,12 +12,18 @@ import com.example.demo.utils.MapptingUtils.UserMapper;
 
 import java.security.Principal;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import com.example.demo.utils.filter.CourseFilter;
+import com.example.demo.utils.filter.NewsFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -51,12 +57,26 @@ public class CourseController {
 
 
     @GetMapping
-    public String courseTable(Principal principal, Model model, @RequestParam(name = "titlePrefix", required = false) String titlePrefix) {
+    public String courseTable(Principal principal, Model model, CourseFilter filter,
+                              @RequestParam(name= "page",defaultValue = "1") int page,
+                              @RequestParam(name= "size", defaultValue = "3") int size) {
         this.statisticsCounter.countHandlerCall("/course");
         if (principal != null) {
             logger.info("Request from user '{}'", principal.getName());
         }
-        model.addAttribute("courses", this.courseService.courseByTitlePrefix(titlePrefix == null ? "" : titlePrefix));
+//        filter.init();
+        Page<Course> courses = courseService.coursesByFilters(filter,page-1,size);
+        int totalPages = courses.getTotalPages();
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                    .boxed()
+                    .collect(Collectors.toList());
+            model.addAttribute("pageNumbers", pageNumbers);
+        }
+        model.addAttribute("courses", courses);
+        model.addAttribute("authors", courseService.findAllAuthors());
+        model.addAttribute("categories", courseService.findAllCategories());
+        model.addAttribute("filter", filter);
         return "course_table";
     }
 

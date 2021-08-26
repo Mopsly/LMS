@@ -66,7 +66,7 @@ public class CourseControllerTest {
 
     @Test
     public void courseFormTest() throws Exception {
-        Course testCourse = new Course(1L, "Author", "Title");
+        Course testCourse = new Course(1L, "Author", "Title","category");
         when(courseService.courseById(1L)).thenReturn(testCourse);
 
         mockMvc.perform(get("/course/{id}", 1L))
@@ -77,7 +77,7 @@ public class CourseControllerTest {
     @Test
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     public void newCourseFromNew() throws Exception {
-        Course testCourse = new Course(1L, "Author", "Title");
+        Course testCourse = new Course(1L, "Author", "Title","category");
         when(courseService.courseById(any(Long.class))).thenReturn(testCourse);
 
         mockMvc.perform(get("/course/new"))
@@ -88,7 +88,7 @@ public class CourseControllerTest {
     @Test
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     public void submitCourseFormTest() throws Exception {
-        Course testCourse = new Course(1L, "Author", "Title");
+        Course testCourse = new Course(1L, "Author", "Title","category");
         mockMvc
                 .perform(post("/course")
                         .with(csrf())
@@ -128,7 +128,7 @@ public class CourseControllerTest {
 
     @Test
     public void assignCourseTest() throws Exception {
-        Course testCourse = new Course(1L, "Author", "Title");
+        Course testCourse = new Course(1L, "Author", "Title","category");
         UserDto user = new UserDto(1L, "User","email","nickname", "password","password", new HashSet<>(), new HashSet<>());
         when(courseService.courseById(any(Long.class))).thenReturn(testCourse);
 

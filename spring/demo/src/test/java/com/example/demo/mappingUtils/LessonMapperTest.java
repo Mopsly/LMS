@@ -13,7 +13,7 @@ public class LessonMapperTest {
     @Test
     public void lessonToDtoTest(){
         Lesson lesson = new Lesson(1L,"Title","Text",
-                new Course(2L,"Course_author","Course_title"));
+                new Course(2L,"Course_author","Course_title","category"));
         LessonDto lessonDto = LessonMapper.mapLessonToDto(lesson);
 
         Assertions.assertThat(lessonDto.getId()).isEqualTo(lesson.getId());
@@ -25,7 +25,7 @@ public class LessonMapperTest {
     @Test
     public void dtoToLessonTest(){
         LessonDto lessonDto = new LessonDto(1L,2L,"Title","Text");
-        Lesson lesson = LessonMapper.mapDtoToLesson(lessonDto, new Course(2L,"Course_author","Course_title"));
+        Lesson lesson = LessonMapper.mapDtoToLesson(lessonDto, new Course(2L,"Course_author","Course_title","category"));
 
         Assertions.assertThat(lesson.getId()).isEqualTo(lessonDto.getId());
         Assertions.assertThat(lesson.getTitle()).isEqualTo(lessonDto.getTitle());

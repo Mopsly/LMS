@@ -4,6 +4,7 @@ public class CourseDto {
     private Long id;
     private String title;
     private String author;
+    private String category;
 
     public Long getId() {
         return this.id;
@@ -29,9 +30,18 @@ public class CourseDto {
         this.author = author;
     }
 
-    public CourseDto(Long id, String title, String author) {
+    public CourseDto(Long id, String title, String author,String category) {
         this.id = id;
         this.title = title;
         this.author = author;
+        this.category = category;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

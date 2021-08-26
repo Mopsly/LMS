@@ -22,9 +22,9 @@ public class CourseServiceTest {
     @BeforeEach
     public void setUp() {
         List<Course> courses = new ArrayList<>();
-        courses.add(new Course(1L,"Вася","Course one"));
-        courses.add(new Course(2L,"Петя","Course two"));
-        courses.add(new Course(3L,"Петя","Course three"));
+        courses.add(new Course(1L,"Вася","Course one","category"));
+        courses.add(new Course(2L,"Петя","Course two","category"));
+        courses.add(new Course(3L,"Петя","Course three","category"));
 
         CourseRepository courseRepositoryMock = Mockito.mock(CourseRepository.class);
         Mockito.when(courseRepositoryMock.findAll()).thenReturn(courses);
@@ -64,7 +64,7 @@ public class CourseServiceTest {
         user.setCourses(new HashSet<Course>());
         user.setRoles(new HashSet<Role>());
 
-        Course course = new Course(1L,"Виталий","Курс");
+        Course course = new Course(1L,"Виталий","Курс","category");
         course.setUsers(new HashSet<User>());
 
         // назначаем пользователя на крус

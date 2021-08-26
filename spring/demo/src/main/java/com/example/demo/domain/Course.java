@@ -26,6 +26,9 @@ public class Course {
     @TitleCase(lang = Lang.ANY)
     private String title;
 
+    @Column
+    private String category;
+
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private List<Lesson> lessons;
 
@@ -41,19 +44,21 @@ public class Course {
     public Course() {
     }
 
-    public Course(Long id, String author, String title) {
+    public Course(Long id, String author, String title, String category) {
         this.id = id;
         this.author = author;
         this.title = title;
+        this.category = category;
     }
 
-    public Course(Long id, String author, String title, List<Lesson> lessons, Set<User> users, CourseImage courseImage) {
+    public Course(Long id, String author, String title, List<Lesson> lessons, Set<User> users, CourseImage courseImage, String category) {
         this.id = id;
         this.author = author;
         this.title = title;
         this.lessons = lessons;
         this.users = users;
         this.courseImage = courseImage;
+        this.category = category;
     }
 
     public Set<User> getUsers() {
@@ -102,5 +107,21 @@ public class Course {
 
     public void setCourseImage(CourseImage courseImage) {
         this.courseImage = courseImage;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public List<Module> getModules() {
+        return modules;
+    }
+
+    public void setModules(List<Module> modules) {
+        this.modules = modules;
     }
 }
