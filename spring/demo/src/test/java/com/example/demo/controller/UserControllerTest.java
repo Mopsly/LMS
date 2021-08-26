@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 
+import com.example.demo.domain.User;
 import com.example.demo.dto.UserDto;
 import com.example.demo.service.RoleService;
 import com.example.demo.service.StatisticsCounter;
@@ -38,7 +39,7 @@ public class UserControllerTest {
 
     @Test
     public void userFormTest() throws Exception{
-        UserDto user = new UserDto(1L,"user","email", "nickname" ,"password","password",new HashSet<>(),new HashSet<>());
+        UserDto user = new UserDto(1L,"user","email", "nickname" ,"password","password",new HashSet<>(),new HashSet<>(), "88005553535");
         when(userService.findUserByUsername(any())).thenReturn(user);
         mockMvc.perform(get("/user"))
                 .andExpect(status().isOk())
@@ -46,8 +47,8 @@ public class UserControllerTest {
     }
     @Test
     public void userFormByIdTest() throws Exception{
-        UserDto user = new UserDto(1L,"user","email", "nickname" ,"password","password",new HashSet<>(),new HashSet<>());
-        when(userService.findDtoById(any(Long.class))).thenReturn(user);
+        UserDto user = new UserDto(1L,"user","email", "nickname" ,"password","password",new HashSet<>(),new HashSet<>(), "88005553535");
+        when(userService.findById(any(Long.class))).thenReturn((User) user);
         mockMvc
                 .perform(get("/user/{id}",1L))
                 .andExpect(status().isOk())
@@ -64,7 +65,7 @@ public class UserControllerTest {
 
     @Test
     public void submitNewUserLoginErrorTest() throws Exception {
-        UserDto user = new UserDto(1L,"admin","email","nickname","123","123",new HashSet<>(),new HashSet<>());
+        UserDto user = new UserDto(1L,"admin","email","nickname","123","123",new HashSet<>(),new HashSet<>(), "88005553535");
 
         mockMvc
                 .perform(post("/user/new")
@@ -75,7 +76,7 @@ public class UserControllerTest {
 
     @Test
     public void submitUserFormTest() throws Exception {
-        UserDto user = new UserDto(1L,"admin","email","nickname","123","123",new HashSet<>(),new HashSet<>());
+        UserDto user = new UserDto(1L,"admin","email","nickname","123","123",new HashSet<>(),new HashSet<>(), "88005553535");
         mockMvc
                 .perform(post("/user")
                         .with(csrf())

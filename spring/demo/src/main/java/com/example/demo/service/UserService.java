@@ -34,13 +34,14 @@ public class UserService {
 
     public List<UserDto> findAll() {
         return this.userRepository.findAll().stream().map(
-                (usr) -> new UserDto(usr.getId(),
-                        usr.getUsername(),
-                        usr.getEmail(),
-                        usr.getNickname(),
-                        "","",
-                        usr.getCourses(),
-                        usr.getRoles()))
+                        (usr) -> new UserDto(usr.getId(),
+                                usr.getUsername(),
+                                usr.getEmail(),
+                                usr.getNickname(),
+                                "","",
+                                usr.getCourses(),
+                                usr.getRoles(),
+                                usr.getPhone()))
                 .collect(Collectors.toList());
     }
 
@@ -75,7 +76,7 @@ public class UserService {
             userDto.setRoles(roles);
         }
         this.userRepository.save(new User(userDto.getId(), userDto.getUsername(), userDto.getEmail(), userDto.getNickname(),
-                this.encoder.encode(userDto.getPassword()), userDto.getCourses(), userDto.getRoles()));
+                this.encoder.encode(userDto.getPassword()), userDto.getCourses(), userDto.getRoles(), userDto.getPhone()));
     }
     public void update(UserDto userDto) {
         User user = userRepository.getById(userDto.getId());
@@ -95,4 +96,5 @@ public class UserService {
     public User findByUsername(String username) {
         return userRepository.findUserByUsername(username).orElseThrow(NotFoundException::new);
     }
+
 }

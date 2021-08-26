@@ -10,7 +10,6 @@
 		<a th:href="@{/user}">Мой профиль</a>
 	</span>
 
-
     <span class="header-item" sec:authorize="hasRole('ADMIN')"
           th:classappend="${activePage =='admin'} ? active">
 		<a th:href="@{/admin}">Администрирование</a>
@@ -21,6 +20,10 @@
 		<a th:href="@{/news}">Новости</a>
 	</span>
 
+    <span class="header-item" sec:authorize="hasRole('ADMIN')"
+          th:classappend="${activePage =='admin'} ? active">
+		<a th:href="@{/user/new}">Создать нового пользователя</a>
+	</span>
     <div class="float-right">
         <a class="header-link" sec:authorize="!isAuthenticated()" th:href="@{/login}">
             Войти

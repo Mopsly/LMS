@@ -4,16 +4,12 @@ package com.example.demo.dto;
 
 import com.example.demo.annotations.FieldMatch;
 import com.example.demo.annotations.LatinAndSymbols;
-import com.example.demo.annotations.UniqueEmail;
-import com.example.demo.annotations.UniqueUsername;
 import com.example.demo.domain.Course;
 import com.example.demo.domain.Role;
 import com.sun.istack.NotNull;
 import org.springframework.data.annotation.Transient;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.Objects;
 import java.util.Set;
 
@@ -35,6 +31,8 @@ public class UserDto {
     @Email(message = "Неверный формат  почты")
     private String email;
 
+    @Pattern(regexp = "^[A-Za-zА-Яа-я]*$",
+            message = "Никнейм может содержать латиницу и/или кириллицу")
     private String nickname;
 
     @NotNull
@@ -42,6 +40,11 @@ public class UserDto {
     @Size(min = 8, message = "Пароль не должен состоять менее чем из 8 символов")
     @LatinAndSymbols(message = "Пароль должен включать в себя латиницу и/или спецсимволы")
     private String password;
+
+    @NotBlank(message = "Номер телефона должен быть указан")
+    @Pattern(regexp = "^$|^(\\+7|7|8)?[\\s\\-]?\\(?[489][0-9]{2}\\)?[\\s\\-]?[0-9]{3}[\\s\\-]?[0-9]{2}[\\s\\-]?[0-9]{2}$",
+            message = "Введен некорректный номер телефона")
+    private String phone;
 
     @Transient
     private String passwordConfirm;
@@ -53,7 +56,8 @@ public class UserDto {
     public UserDto() {
     }
 
-    public UserDto(Long id, String username, String email, String nickname, String password, String passwordConfirm, Set<Course> courses, Set<Role> roles) {
+
+    public UserDto(Long id, String username, String email, String nickname, String password, String passwordConfirm, Set<Course> courses, Set<Role> roles, String phone) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -62,6 +66,7 @@ public class UserDto {
         this.roles = roles;
         this.email = email;
         this.nickname = nickname;
+        this.phone = phone;
     }
 
     public Long getId() {
@@ -128,6 +133,14 @@ public class UserDto {
         this.email = email;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -140,12 +153,13 @@ public class UserDto {
                 && password.equals(userDto.password)
                 && passwordConfirm.equals(userDto.passwordConfirm)
                 && Objects.equals(courses, userDto.courses)
-                && Objects.equals(roles, userDto.roles);
+                && Objects.equals(roles, userDto.roles)
+                && phone.equals(userDto.phone);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, email, nickname, password, passwordConfirm, courses, roles);
+        return Objects.hash(id, username, email, nickname, password, passwordConfirm, courses, roles, phone);
     }
 
     @Override
@@ -159,6 +173,9 @@ public class UserDto {
                 ", passwordConfirm='" + passwordConfirm + '\'' +
                 ", courses=" + courses +
                 ", roles=" + roles +
+                ", phone=" + phone +
                 '}';
     }
 }
+
+
