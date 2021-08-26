@@ -35,6 +35,11 @@
         <small class="hint" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}">
             Имя пользователя не должно быть пустым</small>
 
+        <label for="phone">Номер телефона:</label>
+        <input type="text" name="phone" id = "phone" th:field="*{phone}" >
+        <small class="hint" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">
+            Телефон должен быть заполнен</small>
+
         <label for="password">Пароль:</label>
         <input type="password" id="password"  name="password" th:field="*{password}">
         <small class="hint" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">

@@ -37,6 +37,12 @@
                         Неверный формат адреса электронной почты </small>
                 </div>
                 <div>
+                    <label for="phone">Номер телефона:</label>
+                    <input type="text" name="phone" id="phone" th:field="*{phone}">
+                    <small class="hint" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">
+                        Телефон должен быть заполнен</small>
+                </div>
+                <div>
                     <label for="nick-name">Отображаемое имя:</label>
                     <input type="text" name="nick-name" id="nick-name" th:field="*{nickname}">
                     <small class="hint" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}">

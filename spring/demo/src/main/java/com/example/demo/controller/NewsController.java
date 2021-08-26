@@ -64,7 +64,7 @@ public class NewsController {
     public String recordsWithFilters(NewsFilter filter, Model model) {
         List<NewsRecord> records = newsService.findNewsWithFilters(filter);
         model.addAttribute("records", records);
-        model.addAttribute("authors", newsService.findAllAuthors());
+        model.addAttribute("authors", userService.findAll());
         model.addAttribute("tags", newsService.findAllTags());
         model.addAttribute("filter", new NewsFilter());
         return "news_table";
