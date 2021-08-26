@@ -6,6 +6,7 @@ import com.example.demo.dto.UserDto;
 import com.example.demo.service.RoleService;
 import com.example.demo.service.StatisticsCounter;
 import com.example.demo.service.UserService;
+import com.example.demo.utils.MapptingUtils.UserMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,8 +48,9 @@ public class UserControllerTest {
     }
     @Test
     public void userFormByIdTest() throws Exception{
+
         UserDto user = new UserDto(1L,"user","email", "nickname" ,"password","password",new HashSet<>(),new HashSet<>(), "88005553535");
-        when(userService.findById(any(Long.class))).thenReturn((User) user);
+        when(userService.findDtoById(any(Long.class))).thenReturn((user));
         mockMvc
                 .perform(get("/user/{id}",1L))
                 .andExpect(status().isOk())

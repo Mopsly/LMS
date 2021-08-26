@@ -4,6 +4,8 @@ package com.example.demo.dto;
 
 import com.example.demo.annotations.FieldMatch;
 import com.example.demo.annotations.LatinAndSymbols;
+import com.example.demo.annotations.UniqueEmail;
+import com.example.demo.annotations.UniqueUsername;
 import com.example.demo.domain.Course;
 import com.example.demo.domain.Role;
 import com.sun.istack.NotNull;
