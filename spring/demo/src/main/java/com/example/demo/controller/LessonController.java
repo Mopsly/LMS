@@ -28,13 +28,17 @@ import javax.servlet.http.HttpServletRequest;
 public class LessonController {
     private final StatisticsCounter statisticsCounter;
     private final LessonService lessonService;
+    private final LessonMapper lessonMapper;
     private final CourseService courseService;
+    private final CourseMapper courseMapper;
 
     @Autowired
-    public LessonController(StatisticsCounter statisticsCounter, CourseService courseLister, LessonService lessonService, UserService userService, LessonMapper lessonMapper) {
+    public LessonController(StatisticsCounter statisticsCounter, CourseService courseLister, LessonService lessonService, UserService userService, LessonMapper lessonMapper, LessonMapper lessonMapper1, CourseMapper courseMapper) {
         this.statisticsCounter = statisticsCounter;
         this.courseService = courseLister;
         this.lessonService = lessonService;
+        this.lessonMapper = lessonMapper1;
+        this.courseMapper = courseMapper;
     }
 
     @GetMapping({"/new"})
@@ -49,7 +53,7 @@ public class LessonController {
     @GetMapping({"/{id}"})
     public String lessonForm(Model model, @PathVariable("id") Long id) {
         this.statisticsCounter.countHandlerCall("/lesson/{id}");
-        model.addAttribute("lesson", LessonMapper.mapLessonToDto(this.lessonService.lessonById(id)));
+        model.addAttribute("lesson", lessonMapper.mapLessonToDto(this.lessonService.lessonById(id)));
         return "lesson_form";
     }
 
@@ -62,9 +66,9 @@ public class LessonController {
             return "lesson_form";
         } else {
             Course course = courseService.courseById(lessonDto.getCourseId());
-            Lesson lesson = LessonMapper.mapDtoToLesson(lessonDto, course);
+            Lesson lesson = lessonMapper.mapDtoToLesson(lessonDto, course);
             this.lessonService.saveLesson(lesson);
-            model.addAttribute("course", CourseMapper.mapCourseToDto(course));
+            model.addAttribute("course", courseMapper.mapCourseToDto(course));
             model.addAttribute("lessons", this.lessonService.lessonsWithoutText(course.getId()));
             model.addAttribute("users", course.getUsers());
             return "course_form";
@@ -77,7 +81,7 @@ public class LessonController {
         this.statisticsCounter.countHandlerCall("/course/{id} - delete");
         Course course = this.lessonService.lessonById(id).getCourse();
         this.lessonService.deleteLesson(id);
-        model.addAttribute("course", CourseMapper.mapCourseToDto(course));
+        model.addAttribute("course", courseMapper.mapCourseToDto(course));
         model.addAttribute("lessons", this.lessonService.lessonsWithoutText(course.getId()));
         model.addAttribute("users", course.getUsers());
         return "course_form";

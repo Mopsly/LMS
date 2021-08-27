@@ -24,12 +24,12 @@ public class AdminControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Test
-    public void unAuthorisedUsersTestU() throws Exception {
-        ArrayList<UserDto> users = new ArrayList<>();
-        when(userServiceMock.findAll()).thenReturn(users);
-        mockMvc.perform(get("/admin/users"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("http://localhost/login"));
-    }
+//    @Test
+//    public void unAuthorisedUsersTestU() throws Exception {
+//        ArrayList<UserDto> users = new ArrayList<>();
+//        when(userServiceMock.findAll()).thenReturn(users);
+//        mockMvc.perform(get("/admin/users"))
+//                .andExpect(status().is3xxRedirection())
+//                .andExpect(redirectedUrl("http://localhost/login"));
+//    }
 }

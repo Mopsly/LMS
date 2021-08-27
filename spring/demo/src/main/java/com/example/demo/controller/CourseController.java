@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import com.example.demo.utils.filter.CourseFilter;
-import com.example.demo.utils.filter.NewsFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,17 +40,19 @@ public class CourseController {
     private final StatisticsCounter statisticsCounter;
     private final LessonService lessonService;
     private final UserMapper userMapper;
+    private final CourseMapper courseMapper;
     private final CourseImageStorageService courseImageStorageService;
     private static final Logger logger = LoggerFactory.getLogger(CourseController.class);
 
 
     @Autowired
-    public CourseController(CourseService courseService, UserService userService, StatisticsCounter statisticsCounter, LessonService lessonService, UserMapper userMapper, CourseImageStorageService courseImageStorageService) {
+    public CourseController(CourseService courseService, UserService userService, StatisticsCounter statisticsCounter, LessonService lessonService, UserMapper userMapper, CourseMapper courseMapper, CourseImageStorageService courseImageStorageService) {
         this.courseService = courseService;
         this.userService = userService;
         this.statisticsCounter = statisticsCounter;
         this.lessonService = lessonService;
         this.userMapper = userMapper;
+        this.courseMapper = courseMapper;
         this.courseImageStorageService = courseImageStorageService;
     }
 
@@ -83,7 +84,7 @@ public class CourseController {
     public String courseForm(Model model, @PathVariable("id") Long id) {
         this.statisticsCounter.countHandlerCall("/course/{id}");
         Course course = this.courseService.courseById(id);
-        model.addAttribute("course", CourseMapper.mapCourseToDto(course));
+        model.addAttribute("course", courseMapper.mapCourseToDto(course));
         model.addAttribute("lessons", this.lessonService.lessonsWithoutText(id));
         model.addAttribute("users", course.getUsers());
         return "course_form";

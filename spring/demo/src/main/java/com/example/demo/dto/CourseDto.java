@@ -30,7 +30,10 @@ public class CourseDto {
         this.author = author;
     }
 
-    public CourseDto(Long id, String title, String author,String category) {
+    public CourseDto() {
+    }
+
+    public CourseDto(Long id, String title, String author, String category) {
         this.id = id;
         this.title = title;
         this.author = author;

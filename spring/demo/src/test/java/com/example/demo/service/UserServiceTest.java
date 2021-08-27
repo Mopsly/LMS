@@ -9,6 +9,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.HashSet;
@@ -23,13 +24,19 @@ public class UserServiceTest {
     List<User> users = List.of(new User(1L,"Вася","email","nickname","123",new HashSet<>(),new HashSet<>(), "88005553535"),
             new User(2L,"Петя","email","nickname","123",new HashSet<>(),new HashSet<>(), "88005553535"));
 
+    @Autowired
+    private final UserMapper userMapper;
+
+    public UserServiceTest(UserMapper userMapper) {
+        this.userMapper = userMapper;
+    }
+
     @BeforeEach
     public void setUp(){
         UserRepository userRepositoryMock = Mockito.mock(UserRepository.class);
         RoleRepository roleRepositoryMock = Mockito.mock(RoleRepository.class);
         CourseRepository courseRepositoryMock = Mockito.mock(CourseRepository.class);
         PasswordEncoder passwordEncoderMock = Mockito.mock(PasswordEncoder.class);
-        UserMapper userMapper =  new UserMapper(passwordEncoderMock, mapper);
         CourseService courseService =  new CourseService(courseRepositoryMock);
 
 
