@@ -24,10 +24,10 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     List<Course> findByTitleLike(String title);
 
     @Query("SELECT distinct  c.author from Course c")
-    List<String> findAllAuthors();
+    List<Optional<String>> findAllAuthors();
 
     @Query("SELECT distinct  c.category from Course c")
-    List<String> findAllCategories();
+    List<Optional<String>> findAllCategories();
 
     Optional<Course> findByTitle(String title);
 

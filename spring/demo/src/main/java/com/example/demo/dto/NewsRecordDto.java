@@ -28,7 +28,6 @@ public class NewsRecordDto {
     @NotBlank(message = "Название должно быть указано")
     private String title;
 
-
     private Date publicationDate;
 
     @NotNull

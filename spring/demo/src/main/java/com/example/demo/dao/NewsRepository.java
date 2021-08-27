@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface NewsRepository extends JpaRepository<NewsRecord, Long> {
@@ -25,7 +26,7 @@ public interface NewsRepository extends JpaRepository<NewsRecord, Long> {
                                            @Param("authorId") Long authorId, Sort sort);
 
     @Query("select distinct nr.tag from NewsRecord nr")
-    List<String> findAllTags();
+    List<Optional<String>> findAllTags();
 
     void deleteById(Long id);
 }

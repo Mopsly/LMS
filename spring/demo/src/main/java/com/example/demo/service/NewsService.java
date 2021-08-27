@@ -10,6 +10,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class NewsService {
@@ -52,7 +54,10 @@ public class NewsService {
     }
 
     public List<String> findAllTags(){
-        return newsRepository.findAllTags();
+        return newsRepository.findAllTags().stream()
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
     }
 
     public void save(NewsRecord record) {

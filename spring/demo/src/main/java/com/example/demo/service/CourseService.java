@@ -10,6 +10,7 @@ import com.example.demo.dto.UserDto;
 import com.example.demo.exception.NotFoundException;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.example.demo.utils.filter.CourseFilter;
@@ -107,10 +108,16 @@ public class CourseService {
     }
 
     public List<String> findAllCategories() {
-        return repository.findAllCategories();
+        return repository.findAllCategories().stream()
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
     }
 
     public List<String> findAllAuthors() {
-        return repository.findAllAuthors();
+        return repository.findAllAuthors().stream()
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
     }
 }

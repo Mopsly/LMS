@@ -5,6 +5,8 @@ import com.example.demo.dto.UserDto;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 
 @Entity
@@ -16,18 +18,26 @@ public class User {
     private Long id;
 
     @Column
+    @NotNull
+    @NotBlank
     private String username;
 
     @Column
+    @NotNull
+    @NotBlank
     private String email;
 
     @Column
+    @NotNull
+    @NotBlank
     private String phone;
 
     @Column
     private String nickname;
 
     @Column
+    @NotNull
+    @NotBlank
     private String password;
 
     @ManyToMany(mappedBy = "users")

@@ -24,7 +24,7 @@ public class UserMapper {
 
     public UserDto mapUserToDto(User user) {
         if (user == null)
-            return null;
+            return new UserDto();
         return new UserDto(user.getId(), user.getUsername(), user.getEmail(), user.getNickname(),
                 "***","***", user.getCourses(),
                 user.getRoles(), user.getPhone());
