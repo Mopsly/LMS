@@ -2,6 +2,7 @@ package com.example.demo.utils.MapptingUtils;
 
 import com.example.demo.domain.User;
 import com.example.demo.dto.UserDto;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -9,10 +10,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserMapper {
     private final PasswordEncoder encoder;
+    private final ModelMapper mapper;
 
     @Autowired
-    public UserMapper(PasswordEncoder encoder) {
+    public UserMapper(PasswordEncoder encoder, ModelMapper mapper) {
         this.encoder = encoder;
+        this.mapper = mapper;
     }
 
     public User mapDtoToUser(UserDto userDto) {
@@ -23,10 +26,6 @@ public class UserMapper {
     }
 
     public UserDto mapUserToDto(User user) {
-        if (user == null)
-            return new UserDto();
-        return new UserDto(user.getId(), user.getUsername(), user.getEmail(), user.getNickname(),
-                "***","***", user.getCourses(),
-                user.getRoles(), user.getPhone());
+        return user == null? new UserDto(): mapper.map(user,UserDto.class);
     }
 }

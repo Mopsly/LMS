@@ -25,14 +25,14 @@ public class NewsController {
 
     private final NewsService newsService;
     private final UserService userService;
-    private final UserMapper userMapper;
+    private final NewsRecordMapper newsMapper;
 
 
     @Autowired
-    public NewsController(NewsService newsService, UserService userService, UserMapper userMapper) {
+    public NewsController(NewsService newsService, UserService userService, NewsRecordMapper newsMapper) {
         this.newsService = newsService;
         this.userService = userService;
-        this.userMapper = userMapper;
+        this.newsMapper = newsMapper;
     }
 
 
@@ -54,7 +54,7 @@ public class NewsController {
     @GetMapping("/{id}/edit")
     @PreAuthorize("@AccessSecurityBean.hasAdminRights(#request)")
     public String editRecord(Model model, @PathVariable Long id, HttpServletRequest request) {
-        model.addAttribute("record", NewsRecordMapper.mapNewsRecordToDto(newsService.findRecordById(id)));
+        model.addAttribute("record", newsMapper.mapNewsRecordToDto(newsService.findRecordById(id)));
         model.addAttribute("users",  userService.findAll());
         return "news_edit";
     }
@@ -76,8 +76,7 @@ public class NewsController {
         if(bindingResult.hasErrors()){
             return "news_edit";
         }
-        User author = userMapper.mapDtoToUser(userService.findDtoById(recordDto.getAuthorId()));
-        newsService.save(NewsRecordMapper.mapDtoToNewsRecord(recordDto,author));
+        newsService.save(newsMapper.mapDtoToNewsRecord(recordDto));
         return "redirect:/news";
     }
 

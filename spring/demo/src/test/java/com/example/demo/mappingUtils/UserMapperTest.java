@@ -1,6 +1,5 @@
 package com.example.demo.mappingUtils;
 
-import com.example.demo.dao.CourseRepository;
 import com.example.demo.domain.User;
 import com.example.demo.dto.UserDto;
 import com.example.demo.utils.MapptingUtils.UserMapper;
@@ -20,7 +19,7 @@ public class UserMapperTest {
     public void setUp(){
         PasswordEncoder passwordEncoderMock = Mockito.mock(PasswordEncoder.class);
         Mockito.when(passwordEncoderMock.encode("123")).thenReturn("***");
-        userMapper = new UserMapper(passwordEncoderMock);
+        userMapper = new UserMapper(passwordEncoderMock, mapper);
     }
 
     @Test

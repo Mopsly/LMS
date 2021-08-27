@@ -1,28 +1,36 @@
 package com.example.demo.utils.MapptingUtils;
 
-import com.example.demo.domain.Course;
-import com.example.demo.domain.Module;
 import com.example.demo.domain.NewsRecord;
 import com.example.demo.domain.User;
-import com.example.demo.dto.ModuleDto;
 import com.example.demo.dto.NewsRecordDto;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.sql.Date;
 import java.util.Calendar;
 
+@Component
 public class NewsRecordMapper {
 
-    public static NewsRecord mapDtoToNewsRecord(NewsRecordDto dto, User user) {
+    private final ModelMapper mapper;
+
+    @Autowired
+    public NewsRecordMapper(ModelMapper mapper) {
+        this.mapper = mapper;
+    }
+
+    public NewsRecord mapDtoToNewsRecord(NewsRecordDto dto) {
+        if(dto == null){
+            return null;
+        }
         if (dto.getPublicationDate() == null){
             dto.setPublicationDate(new Date(Calendar.getInstance().getTime().getTime()));
         }
-        return new NewsRecord(dto.getId(), user, dto.getTitle(),dto.getPublicationDate(), dto.getTag());
+        return mapper.map(dto,NewsRecord.class);
     }
 
-    public static NewsRecordDto mapNewsRecordToDto(NewsRecord record) {
-        if (record.getAuthor() != null) {
-            return new NewsRecordDto(record.getId(), record.getAuthor().getId(),record.getTitle(),record.getPublicationDate(),record.getTag());
-        }
-        return new NewsRecordDto(record.getId(), null,record.getTitle(),record.getPublicationDate(),record.getTag());
+    public NewsRecordDto mapNewsRecordToDto(NewsRecord record) {
+        return record == null ? new NewsRecordDto() :  mapper.map(record,NewsRecordDto.class);
     }
 }

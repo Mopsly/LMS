@@ -29,7 +29,7 @@ public class UserServiceTest {
         RoleRepository roleRepositoryMock = Mockito.mock(RoleRepository.class);
         CourseRepository courseRepositoryMock = Mockito.mock(CourseRepository.class);
         PasswordEncoder passwordEncoderMock = Mockito.mock(PasswordEncoder.class);
-        UserMapper userMapper =  new UserMapper(passwordEncoderMock);
+        UserMapper userMapper =  new UserMapper(passwordEncoderMock, mapper);
         CourseService courseService =  new CourseService(courseRepositoryMock);
 
 

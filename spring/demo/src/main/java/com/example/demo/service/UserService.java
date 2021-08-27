@@ -33,20 +33,13 @@ public class UserService {
     }
 
     public List<UserDto> findAll() {
-        return this.userRepository.findAll().stream().map(
-                        (usr) -> new UserDto(usr.getId(),
-                                usr.getUsername(),
-                                usr.getEmail(),
-                                usr.getNickname(),
-                                "","",
-                                usr.getCourses(),
-                                usr.getRoles(),
-                                usr.getPhone()))
+        return this.userRepository.findAll().stream()
+                .map(userMapper::mapUserToDto)
                 .collect(Collectors.toList());
     }
 
     public UserDto findDtoById(long id) {
-        return userMapper.mapUserToDto((User) this.userRepository.findById(id).orElseThrow(NotFoundException::new));
+        return userMapper.mapUserToDto(this.userRepository.findById(id).orElseThrow(NotFoundException::new));
     }
 
     public User findById(Long id){
