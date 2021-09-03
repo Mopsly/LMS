@@ -77,5 +77,4 @@ public class UserServiceTest {
                 .assertThat(userService.unassignedUsers(1L))
                 .extracting("username").contains("Вася");
     }
-
 }
